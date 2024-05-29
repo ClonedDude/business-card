@@ -1,0 +1,39 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Support\Facades\Validator;
+use App\Models\{{ model_class_name }};
+
+class {{ serviceClassName }} {
+    public function create{{ model_class_name }}(array $data)
+    {
+        $validated = Validator::make($data, [
+
+        ])->validate();
+
+        ${{ model_variable_name }} = {{ model_class_name }}::create($validated);
+
+        return ${{ model_variable_name }};
+    }
+
+    public function update{{ model_class_name }}(int $id, array $data)
+    {
+        ${{ model_variable_name }} = {{ model_class_name }}::find($id);
+
+        $validated = Validator::make($data, [
+
+        ])->validate();
+
+        ${{ model_variable_name }}->update($validated);
+
+        return ${{ model_variable_name }};
+    }
+
+    public function delete{{ model_class_name }}(int $id)
+    {
+        ${{ model_variable_name }} = {{ model_class_name }}::find($id);
+
+        return ${{ model_variable_name }}->delete();
+    }
+}
