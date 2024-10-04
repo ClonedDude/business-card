@@ -47,7 +47,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [])
             ->afterCreating(function (User $user) use ($role) {
-                // $user->assignRole($role);
+                $user->assignRole($role);
             });
     }
 }

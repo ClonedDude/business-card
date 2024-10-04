@@ -15,9 +15,9 @@ class SubscriptionPlanController extends Controller
 
     public function show($id)
     {
-        $contact = SubscriptionPlan::findOrFail($id);
+        $subscription_plan_rule = SubscriptionPlan::findOrFail($id);
 
-        return view("welcome", compact("contact"));
+        return view("welcome", compact("subscription_plan_rule"));
     }
 
     public function create()
@@ -25,12 +25,12 @@ class SubscriptionPlanController extends Controller
         return view("welcome");
     }
 
-    public function store(Request $request, SubscriptionPlanService $contactService)
+    public function store(Request $request, SubscriptionPlanService $subscriptionPlanService)
     {
-        $contact = $contactService->createSubscriptionPlan($request->all());
+        $subscription_plan_rule = $subscriptionPlanService->createSubscriptionPlan($request->all());
 
-        return redirect(route("contacts.index"))
-            ->with("success", "contact created successfully");
+        return redirect(route("subscription-plans.index"))
+            ->with("success", "subscription plan created successfully");
     }
 
     public function edit()
@@ -38,19 +38,19 @@ class SubscriptionPlanController extends Controller
         return view("welcome");
     }
 
-    public function update(Request $request, SubscriptionPlanService $contactService, int $id)
+    public function update(Request $request, SubscriptionPlanService $subscriptionPlanService, int $id)
     {
-        $contact = $contactService->updateSubscriptionPlan($id, $request->all());
+        $subscription_plan_rule = $subscriptionPlanService->updateSubscriptionPlan($id, $request->all());
 
-        return redirect(route("contacts.index"))
-            ->with("success", "contact updated successfully");
+        return redirect(route("subscription-plans.index"))
+            ->with("success", "subscription plan updated successfully");
     }
 
-    public function delete(Request $request, SubscriptionPlanService $contactService, int $id)
+    public function delete(Request $request, SubscriptionPlanService $subscriptionPlanService, int $id)
     {
-        $contactService->deleteSubscriptionPlan($id);
+        $subscriptionPlanService->deleteSubscriptionPlan($id);
 
-        return redirect(route("contacts.index"))
-            ->with("success", "contact deleted successfully");
+        return redirect(route("subscription-plans.index"))
+            ->with("success", "subscription plan deleted successfully");
     }
 }

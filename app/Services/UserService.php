@@ -9,10 +9,21 @@ class UserService {
     public function createUser(array $data)
     {
         $validated = Validator::make($data, [
-
+            "name" => ["required"],
+            "email" => ["required"],
+            "password" => ["required", "confirmed"],
+            "company_ids" => ["required", "array"],
+            "company_ids.*" => ["required", "exists:companies,id"],
+            "profile_picture" => ["sometimes", "image", "max:8192", "nullable"]
         ])->validate();
 
         $user = User::create($validated);
+
+        $user->uploadProfilePicture($validated["profile_picture"]);
+
+        if ($validated["company_ids"] ?? false){
+            $user->companies()->attach($validated["company_ids"]);
+        }
 
         return $user;
     }
@@ -22,10 +33,25 @@ class UserService {
         $user = User::find($id);
 
         $validated = Validator::make($data, [
-
+            "name" => ["required"],
+            "email" => ["required"],
+            "password" => ["nullable", "confirmed"],
+            "company_ids" => ["required", "array"],
+            "company_ids.*" => ["required", "exists:companies,id"],
+            "profile_picture" => ["sometimes", "image", "max:8192", "nullable"]
         ])->validate();
+        
+        if (empty($validated['password'])) {
+            unset($validated['password']);
+        }
 
         $user->update($validated);
+        $user->uploadProfilePicture($validated["profile_picture"]);
+
+        if ($validated["company_ids"] ?? false) {
+            $user->companies()->detach();
+            $user->companies()->attach($validated["company_ids"]);
+        }
 
         return $user;
     }

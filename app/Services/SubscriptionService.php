@@ -6,23 +6,16 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Subscription;
 
 class SubscriptionService {
-    public function createSubscription(array $data)
-    {
-        $validated = Validator::make($data, [
-
-        ])->validate();
-
-        $subscription = Subscription::create($validated);
-
-        return $subscription;
-    }
-
     public function updateSubscription(int $id, array $data)
     {
         $subscription = Subscription::find($id);
 
         $validated = Validator::make($data, [
-
+            "subscription_plan_id" => ["required"],
+            "user_id" => ["required"],
+            "company_id" => ["required"],
+            "start_at" => ["required"],
+            "expire_at" => ["required"],
         ])->validate();
 
         $subscription->update($validated);
