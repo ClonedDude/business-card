@@ -5,24 +5,101 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use App\Services\ContactService;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
+use JeroenDesloovere\VCard\VCard;
 
 class ContactController extends Controller
 {
     public function index()
     {
-        return view("welcome");
+        return view("pages.contact.index");
+    }
+
+    public function data()
+    {
+        $contacts_query = Contact::select("*")
+            ->with(["user", "company"]);
+
+        return DataTables::of($contacts_query)
+            ->addColumn("profile_picture", function ($row) {
+                return $row->profile_picture_url
+                    ? view("components.image-preview", ["url" => $row->profile_picture_url, "title" => "{$row->name} profile picture"])->render()
+                    : null;
+            })
+            ->addColumn("user_name", function ($row) {
+                return $row->user->name;
+            })
+            ->addColumn("company_name", function ($row) {
+                return $row->company->name;
+            })
+            ->addColumn("action", function ($row) {
+                $detail_button
+                    = '<a href="'.route('contacts.show', $row->id).'" class="btn btn-sm btn-primary me-2 mb-4">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                    </a>';
+
+                $public_detail_button
+                    = '<a href="'.route('public-contact-detail', ["contact_code" => $row->contact_code]).'" class="btn btn-sm btn-primary me-2 mb-4">
+                        <i class="fas fa-eye"></i>
+                        Public Detail
+                    </a>';
+
+                $edit_button
+                    = '<a href="'.route('contacts.edit', $row->id).'" class="btn btn-sm btn-info me-2 mb-4">
+                        <i class="fas fa-edit"></i>
+                        Edit
+                    </a>';
+
+                $delete_button
+                    = '<form class="delete-training-form" action="'.route('contacts.delete', $row->id).'" method="POST">
+                        '.csrf_field().'
+                        <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
+                        <i class="fas fa-trash"></i>
+                        Delete</button>
+                    </form>';
+
+                $html = "<div class='d-flex flex-row'>
+                    $detail_button
+                    $public_detail_button
+                    $edit_button
+                    $delete_button
+                </div>";
+
+                return $html;
+            })
+            ->rawColumns(["profile_picture", "action"])
+            ->make(true);
     }
 
     public function show($id)
     {
         $contact = Contact::findOrFail($id);
 
-        return view("welcome", compact("contact"));
+        return view("pages.contact.show", compact("contact"));
+    }
+
+    public function downloadVCard($id)
+    {
+        $contact = Contact::findOrFail($id);
+
+        $vcard = new VCard();
+
+        $vcard->addName($contact->last_name, $contact->first_name, '', '', '');
+
+        // add work data
+        if ($contact->company->name) $vcard->addCompany($contact->company->name);
+        if ($contact->job_title) $vcard->addJobtitle($contact->job_title);
+        if ($contact->email) $vcard->addEmail($contact->email, 'WORK');
+        if ($contact->phone_number) $vcard->addPhoneNumber($contact->phone_number, 'PREF;CELL');
+        if ($contact->address) $vcard->addAddress($contact->address, '', '', '', '', '', '');
+
+        return $vcard->download();
     }
 
     public function create()
     {
-        return view("welcome");
+        return view("pages.contact.create");
     }
 
     public function store(Request $request, ContactService $contactService)
@@ -33,9 +110,11 @@ class ContactController extends Controller
             ->with("success", "contact created successfully");
     }
 
-    public function edit()
+    public function edit($id)
     {
-        return view("welcome");
+        $contact = Contact::findOrFail($id);
+
+        return view("pages.contact.edit", compact("contact"));
     }
 
     public function update(Request $request, ContactService $contactService, int $id)

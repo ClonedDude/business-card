@@ -29,6 +29,6 @@ class CalculateGrandTotal {
             $data["total"] += $item->price;
         }
 
-        return next($data);
+        return $next($data);
     }
 }

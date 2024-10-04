@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("admin_id");
             $table->string("registration_number");
+            $table->string("name");
             $table->string("address");
             $table->string("phone_number");
             $table->string("fax");

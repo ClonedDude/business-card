@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head><base href="">
+		<title>Business Card</title>
+		<meta charset="utf-8" />
+		<meta name="csrf-token" content="{{ csrf_token() }}">
+		<link rel="shortcut icon" href="{{ asset("assets/admin/images/logo.png") }}" type="image/x-icon">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+		{{-- <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script> --}}
+		<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+		@vite(['resources/sass/app.scss'])
+		<link href="{{ asset('assets/admin/css/style.bundle.css') }}" rel="stylesheet" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		@livewireStyles
+		@stack('head')
+
+		<style>
+			.modal {
+				z-index: 99999;
+			}
+		</style>
+	</head>
+	<body class="bg-dark">
+		<div class="row p-0 m-0">
+			@yield('content')
+		</div>
+
+		<script src="{{ asset("assets/admin/js/scripts.bundle.js") }}"></script>
+		<script src="{{ asset("assets/admin/plugins/global/plugins.bundle.js")}}"></script>
+
+		<script>
+			const myDefaultAllowList = bootstrap.Tooltip.Default.allowList;
+
+			myDefaultAllowList.div = ["class"];
+			myDefaultAllowList.form = ["class", "action", "method"];
+			myDefaultAllowList.button = ["type", "class", "onclick"];
+			myDefaultAllowList.input = ["type", "class", "value", "name"];
+		</script>
+
+		@if (session("error"))
+			<script>
+				Swal.fire({
+					text: "{{ session('error') }}!",
+					icon: "error",
+					buttonsStyling: false,
+					confirmButtonText: "Close Message!",
+					customClass: {
+						confirmButton: "btn btn-danger"
+					}
+				});
+			</script>
+		@elseif (session("success"))
+			<script>
+				Swal.fire({
+					text: "{{ session('success') }}",
+					icon: "success",
+					buttonsStyling: false,
+					confirmButtonText: "Ok, got it!",
+					customClass: {
+						confirmButton: "btn btn-success"
+					}
+				});
+			</script>
+		@endif
+
+		@livewireScripts()
+		@livewireScriptConfig()
+		
+		@stack('scripts')
+
+		{{-- @livewire('javascript-executor') --}}
+	</body>
+</html>

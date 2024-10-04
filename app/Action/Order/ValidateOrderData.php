@@ -9,11 +9,12 @@ class ValidateOrderData {
     public function handle(array $data, Closure $next)
     {
         $validated = Validator::make($data, [
-            "cart" => ["required", "array"],
-            "cart.*.itemable_id" => ["required"],
-            "cart.*.itemable_type" => ["required"]
+            "items" => ["required", "array"],
+            "items.*.itemable_id" => ["required"],
+            "items.*.itemable_type" => ["required"],
+            "items.*.quantity" => ["required"]
         ])->validate();
 
-        return next($validated);
+        return $next($data);
     }
 }

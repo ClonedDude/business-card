@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\Validator;
 class UpdateOrder {
     public function handle(array $data, Closure $next)
     {
-        $order = Order::create($data);
+        $data["order"]->update($data);
 
-        return next($order);
+        $data["order"]->refresh();
+
+        return $next($data);
     }
 }

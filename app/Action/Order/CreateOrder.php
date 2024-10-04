@@ -11,6 +11,6 @@ class CreateOrder {
     {
         $order = Order::create($data);
 
-        return next($order);
+        return $next($order);
     }
 }
