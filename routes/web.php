@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompanyUserController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExternalLinkController;
 use App\Http\Controllers\ExternalLinkTypeController;
 use App\Http\Controllers\HomeController;
@@ -12,7 +13,6 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PublicContactController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SubscriptionPlanController;
-use App\Models\User;
 use App\Http\Controllers\SubscriptionPlanRuleController;
 use App\Http\Controllers\SubscriptionRuleController;
 use Illuminate\Support\Facades\Route;
@@ -179,6 +179,21 @@ Route::middleware(['2fa'])->group(function () {
         Route::get("/{id}/edit", [ExternalLinkController::class, 'edit'])->name("edit");
         Route::post("/{id}/update", [ExternalLinkController::class, 'update'])->name("update");
         Route::post("/{id}/delete", [ExternalLinkController::class, 'delete'])->name("delete");
+    });
+
+    //Expense route
+    Route::group([
+        "prefix" => "expenses",
+        "as" => "expenses.",
+    ], function () {
+        Route::get("/", [ExpenseController::class, 'index'])->name("index");
+        Route::get("/data", [ExpenseController::class, 'data'])->name("data");
+        Route::get("/{id}/detail", [ExpenseController::class, 'show'])->name("show");
+        Route::get("/create", [ExpenseController::class, 'create'])->name("create");
+        Route::post("/store", [ExpenseController::class, 'store'])->name("store");
+        Route::get("/{id}/edit", [ExpenseController::class, 'edit'])->name("edit");
+        Route::post("/{id}/update", [ExpenseController::class, 'update'])->name("update");
+        Route::post("/{id}/delete", [ExpenseController::class, 'delete'])->name("delete");
     });
 
     Route::group([

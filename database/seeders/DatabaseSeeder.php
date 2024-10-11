@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Expense;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,6 +18,8 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             SubscriptionRuleSeeder::class,
             UserSeeder::class,
+            ExpenseSeeder::class,
+            CompanySeeder::class,
         ]);
     }
 }
