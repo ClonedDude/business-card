@@ -24,6 +24,7 @@ class ExpenseItemService {
     public function updateItem(int $id, array $data)
     {
         $item = ExpenseItem::findOrFail($id);
+
         $validated = Validator::make($data, [
             "name" => ["required", "string"],
             "description" => ["nullable", "string"],
@@ -31,7 +32,11 @@ class ExpenseItemService {
             "price" => ["required", "numeric"],
             "currency" => ["required", "string"],
         ])->validate();
- 
+
+        if (isset($validated['description']) && $validated['description'] !== $item->description) {
+            $item->description = $validated['description'];
+        }
+        $item->save();
         return $item->update($validated);
        
     }
