@@ -216,7 +216,7 @@
                             <span class="menu-title">Create Expense</span>
                         </a>
 
-                        <a class="menu-link" href="{{ route("items.index
+                        <a class="menu-link" href="{{ route("items.index") }}">
                         
                                <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
