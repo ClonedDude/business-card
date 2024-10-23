@@ -8,7 +8,6 @@ use App\Models\Contact;
 class ContactService {
     public function createContact(array $data)
     {
-        dd($data);
         $validated = Validator::make($data, [
             "user_id" => ["required", "exists:users,id"],
             "company_id" => ["required", "exists:companies,id"],

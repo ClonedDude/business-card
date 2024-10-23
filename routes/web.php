@@ -6,6 +6,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompanyUserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ExpenseItemController;
 use App\Http\Controllers\ExternalLinkController;
 use App\Http\Controllers\ExternalLinkTypeController;
 use App\Http\Controllers\HomeController;
@@ -195,6 +196,22 @@ Route::middleware(['2fa'])->group(function () {
         Route::post("/{id}/update", [ExpenseController::class, 'update'])->name("update");
         Route::post("/{id}/delete", [ExpenseController::class, 'delete'])->name("delete");
     });
+
+    //Items (expense) route
+    Route::group([
+        "prefix" => "items",
+        "as" => "items.",
+    ], function () {
+        Route::get("/", [ExpenseItemController::class, 'index'])->name("index");
+        Route::get("/data", [ExpenseItemController::class, 'data'])->name("data");
+        Route::get("/{id}/detail", [ExpenseItemController::class, 'show'])->name("show");
+        Route::get("/create", [ExpenseItemController::class, 'create'])->name("create");
+        Route::post("/store", [ExpenseItemController::class, 'store'])->name("store");
+        Route::get("/{id}/edit", [ExpenseItemController::class, 'edit'])->name("edit");
+        Route::post("/{id}/update", [ExpenseItemController::class, 'update'])->name("update");
+        Route::post("/{id}/delete", [ExpenseItemController::class, 'delete'])->name("delete");
+    });
+
 
     Route::group([
         "prefix" => "subscription-rules",

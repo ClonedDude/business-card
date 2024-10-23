@@ -18,8 +18,9 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             SubscriptionRuleSeeder::class,
             UserSeeder::class,
-            ExpenseSeeder::class,
             CompanySeeder::class,
+            ExpenseSeeder::class,
+            ExpenseItemSeeder::class,
         ]);
     }
 }

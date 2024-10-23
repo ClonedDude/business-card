@@ -215,10 +215,27 @@
                             </span>
                             <span class="menu-title">Create Expense</span>
                         </a>
+
+                        <a class="menu-link" href="{{ route("items.index
+                        
+                               <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">View Items</span>
+                        </a>
+
+                        <a class="menu-link" href="{{ route("items.create") }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Create Items</span>
+                        </a>
                     </div>
                 </div>
                 {{-- End of expense management --}}
 
+
+                
                 <div class="menu-item">
                     <form class="menu-link" action="{{ route("logout") }}" method="POST">
                         @csrf

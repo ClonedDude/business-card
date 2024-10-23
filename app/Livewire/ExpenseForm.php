@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\User;
+use App\Models\ExpenseItem;
 use Livewire\Component;
 
 class ExpenseForm extends Component
@@ -10,6 +11,7 @@ class ExpenseForm extends Component
     public $user_id, $company_id;
     public $user, $company;
     public $users, $companies;
+    public $item, $items;
     public $is_detail_inputs_allowed;
     public $id, $expense_name, $additional_details, $total_amount, $currency, $date_of_expense, $user_ID, $approval;
     public $expense;
@@ -28,9 +30,22 @@ class ExpenseForm extends Component
             $this->user_ID = $expense->user_ID;
             $this->approval = $expense->approval;
 
-            $this->users = User::select("*")
+            $this->items = ExpenseItem::select("*")->get();
+            
+            if ($this->items->count() > 1) {
+                $this->item_id = $this->items->first()->id;
+                $this->updatedUserId();
+            }
+        } else {
+            $this->items = ExpenseItem::select("*")
                 ->get();
+
+            if ($this->items->count() > 1) {
+                $this->item_id = $this->items->first()->id;
+                $this->updatedUserId();
+            }
         }
+    
     }
 
     public function updatedUserId()
@@ -47,19 +62,10 @@ class ExpenseForm extends Component
 
     public function getCompany()
     {
-        $user = User::find($this->user_id);
+        $items = ExpenseItem::all();
 
-        $this->companies = $user->companies;
+        $this->items = $items;
 
-        if ($this->expense) {
-            $this->company_id = $this->expense->company_id;
-        } else {
-            if ($this->companies->count() > 0) {
-                $this->company_id = $this->companies->first()->id;
-            } else {
-                $this->company_id = null;
-            }
-        }
     }
 
     public function hydrate()

@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
-use App\Models\User;
+use App\Models\ExpenseItem;
 use App\Services\ExpenseService;
+use App\Models\ExpenseTransactionItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+
+use function Laravel\Prompts\alert;
 
 class ExpenseController extends Controller
 {
@@ -17,11 +20,6 @@ class ExpenseController extends Controller
         return view("pages.expense.index");
     }
 
-
-    public function create()
-    {
-        return view("pages.expense.create");
-    }
 
     public function data()
     {
@@ -95,25 +93,29 @@ class ExpenseController extends Controller
 
     public function store(Request $request, ExpenseService $expenseService)
     {
-        $expense = $expenseService->createExpense($request->all());
+        $expenseService->createExpense($request);
+          // Redirect or return a response (as needed)
+          return redirect()->route('expenses.index')
+                           ->with('success', 'Expense has been successfully added.');
+    }
 
-        return redirect(route("expenses.index"))
-            ->with("success", "user created successfully");
+    public function create()
+    {
+        return view("pages.expense.create");
     }
 
     public function edit(int $id)
     {
-        $expense = Expense::find($id);
-
-        return view("pages.expense.edit", compact("expense"));
+        $expense = Expense::with('expenseItems')->find($id); // Load expense and its items
+        $item = ExpenseItem::all(); // List of all items for the dropdown
+        return view('pages.expense.edit', compact('expense', 'item'));
     }
-
+    
     public function update(Request $request, ExpenseService $expenseService, int $id)
     {
-        $company = $expenseService->updateExpense($id, $request->all());
+        $expense = $expenseService->updateExpense($id, $request);
 
-        return redirect(route("expenses.index"))
-            ->with("success", "company updated successfully");
+        return redirect(route("expenses.index"))->with("success", "company deleted successfully");
     }
 
     public function delete(Request $request, ExpenseService $expenseService, int $id)
@@ -125,11 +127,12 @@ class ExpenseController extends Controller
     }
 
     public function show($id)
-    {
-        $expense = Expense::findOrFail($id);
+{
+    // Use eager loading to load the related expense items
+    $expense = Expense::with('expenseItems.item')->findOrFail($id);  // Eager load the expenseItems
 
-        return view("pages.expense.show", compact("expense"));
-    }
+    return view('pages.expense.show', compact('expense'));
+}
 
 
 }

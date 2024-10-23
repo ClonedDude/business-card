@@ -1,0 +1,66 @@
+/* Styling the table */
+.item-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.item-table th, .item-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.item-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+/* Inputs inside table */
+.item-select, .price-input, .currency-display, .quantity-select {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Button to add items */
+.add-btn {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.add-btn:hover {
+  background-color: #218838;
+}
+
+/* Grand total styling */
+.grand-total-container {
+  margin-top: 20px;
+}
+
+.grand-total {
+  font-size: 18px;
+  font-weight: bold;
+  color: #28a745;
+}
+
+/* Remove button */
+.remove-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background-color: #c82333;
+}

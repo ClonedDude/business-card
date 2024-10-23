@@ -15,7 +15,7 @@
                     @csrf
                     <div class="row">
                         <div class="col-9">
-                            @livewire("expense-form", ["expense" => $expense])
+                            @livewire("expense-form", ["expense" => $expense, "item" => $item])
                         </div>
                     </div>
                 </div>

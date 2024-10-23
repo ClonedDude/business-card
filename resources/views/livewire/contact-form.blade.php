@@ -11,7 +11,7 @@
             data-placeholder="Select an option"
             data-allow-clear="true"
             required
-            wire:model.live="user_id"
+            wire:model.live="user_id">
             @if ($contact)
                 disabled
             @endif>

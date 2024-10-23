@@ -2,37 +2,36 @@
 
 namespace App\Livewire;
 
+use App\Models\ExpenseItem;
 use App\Models\User;
 use Livewire\Component;
 
-class ContactForm extends Component
+class ExpenseItemForm extends Component
 {
     public $user_id, $company_id;
     public $user, $company;
     public $users, $companies;
     public $is_detail_inputs_allowed;
-    public $name, $address, $phone_number, $fax, $email, $subtitle, $job_title, $quote, $website_url;
-    public $contact;
+    public $id, $name, $description, $price, $currency, $created_at, $updated_at;
+    public $item;
 
-    public function mount($contact)
+    public function mount($item)
     {
-        if ($contact) {
-            $this->contact = $contact;
+        if ($item) {
+            $this->item = $item;
+            
+            $this->id = $item->id;
+            $this->name = $item->name;
+            $this->description = $item->description;
+            $this->price = $item->price;
+            $this->currency = $item->currency;
+            $this->created_at = $item->created_at;
+            $this->company_id = $item->company_id;
+            $this->updated_at = $item->updated_at;
 
-            $this->name = $contact->name;
-            $this->address = $contact->address;
-            $this->phone_number = $contact->phone_number;
-            $this->fax = $contact->fax;
-            $this->email = $contact->email;
-            $this->subtitle = $contact->subtitle;
-            $this->job_title = $contact->job_title;
-            $this->quote = $contact->quote;
-            $this->website_url = $contact->website_url;
-
+           
             $this->users = User::select("*")
-                ->get();
-                
-       
+            ->get();
             if ($this->users->count() > 1) {
                 $this->user_id = $this->contact->user_id;
                 $this->updatedUserId();
@@ -46,8 +45,8 @@ class ContactForm extends Component
                 $this->updatedUserId();
             }
         }
+        
     }
-
     public function updatedUserId()
     {
         $this->getCompany();
@@ -66,6 +65,15 @@ class ContactForm extends Component
 
         $this->companies = $user->companies;
 
+        if ($this->item) {
+            $this->company_id = $this->contact->company_id;
+        } else {
+            if ($this->companies->count() > 0) {
+                $this->company_id = $this->companies->first()->id;
+            } else {
+                $this->company_id = null;
+            }
+        }
     }
 
     public function hydrate()
@@ -74,8 +82,7 @@ class ContactForm extends Component
 
     public function render()
     {
-        $this->is_detail_inputs_allowed = ($this->user_id && $this->company_id);
 
-        return view('livewire.contact-form');
+        return view('livewire.expense-item-form');
     }
 }

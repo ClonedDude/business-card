@@ -13,6 +13,7 @@
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 		@vite(['resources/sass/app.scss'])
 		<link href="{{ asset('assets/admin/css/style.bundle.css') }}" rel="stylesheet" />
+		<link href="{{ asset('C:\Users\User\business-card\resources\css\app.css') }}" rel="stylesheet" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
 		@livewireStyles
