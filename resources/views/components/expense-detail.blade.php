@@ -50,31 +50,32 @@
             </div>
     </div>
 
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-row justify-content-between p-4 border-bottom">
         
         {{-- List the items associated with the expense --}}
         @if($expense->expenseItems->isEmpty())
             <p>No items associated with this expense.</p>
         @else
-            <table class="table">
+            <table class="item-table">
                 <thead>
                     <tr>
                         <th>Item Name</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Subtotal</th>
+                        <th class="text-center">Price</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-center">Subtotal</th>
                     </tr>
                 </thead>
                     <tbody>
                         @foreach ($expense->expenseItems as $item)
                             <tr>
                                 <td>{{ $item->item->name }}</td> <!-- Access the related item's name -->
-                                <td>{{ $item->price }}</td>
-                                <td>{{ $item->quantity }}</td>
-                                <td>{{ $item->price * $item->quantity }}</td>
+                                <td class="text-center">{{ $item->currency }} {{ number_format($item->price, 2) }}</td>
+                                <td class="text-center">{{ $item->quantity }}</td>
+                                <td class="text-center">{{ $item->currency }} {{ number_format($item->price * $item->quantity, 2) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
             </table>
         @endif
+    </div>
 </div>

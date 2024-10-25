@@ -99,6 +99,31 @@ class ExpenseController extends Controller
                            ->with('success', 'Expense has been successfully added.');
     }
 
+    public function searchItems(Request $request)
+{
+    $query = $request->get('query');
+
+    // Fetch items that match the search query
+    $items = ExpenseItem::where('name', 'LIKE', "%{$query}%")
+                ->orWhere('description', 'LIKE', "%{$query}%")
+                ->limit(10)  // Limit the number of results
+                ->get();
+
+    // Return the items as JSON
+    return response()->json([
+        'items' => $items->map(function($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'price' => $item->price,
+                'currency' => $item->currency,
+            ];
+        }),
+    ]);
+}
+
+
+
     public function create()
     {
         return view("pages.expense.create");
@@ -117,6 +142,8 @@ class ExpenseController extends Controller
 
         return redirect(route("expenses.index"))->with("success", "company deleted successfully");
     }
+
+    
 
     public function delete(Request $request, ExpenseService $expenseService, int $id)
     {

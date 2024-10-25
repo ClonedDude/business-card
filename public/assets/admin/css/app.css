@@ -64,3 +64,22 @@
 .remove-btn:hover {
   background-color: #c82333;
 }
+
+.search-results-container {
+  position: absolute;
+  z-index: 1000;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.search-results-container div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.search-results-container div:hover {
+  background-color: #f1f1f1;
+}

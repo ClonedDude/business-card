@@ -195,6 +195,8 @@ Route::middleware(['2fa'])->group(function () {
         Route::get("/{id}/edit", [ExpenseController::class, 'edit'])->name("edit");
         Route::post("/{id}/update", [ExpenseController::class, 'update'])->name("update");
         Route::post("/{id}/delete", [ExpenseController::class, 'delete'])->name("delete");
+        Route::get('/expenses/search-items', [ExpenseController::class, 'searchItems'])->name('search-items');
+
     });
 
     //Items (expense) route

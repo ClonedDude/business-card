@@ -16,7 +16,6 @@ class ExpenseService {
       // Store function to handle the creation of new expenses with items
       public function createExpense(Request $request)
       {
-        
         // Get the authenticated user
         $user = Auth::user();
 
@@ -85,11 +84,9 @@ class ExpenseService {
             'items.*.quantity' => 'required|integer|min:1',
             'approval' => 'required|boolean'
         ]);
-
         
         $subtotal = 0;
         ExpenseTransactionItem::where('expense_id', $id)->delete();
-
 
         foreach ($request->items as $item) {
             // Find the expense item 
