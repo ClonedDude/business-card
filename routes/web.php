@@ -7,6 +7,7 @@ use App\Http\Controllers\CompanyUserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseItemController;
+use App\Http\Controllers\ExpenseApprovalController;
 use App\Http\Controllers\ExternalLinkController;
 use App\Http\Controllers\ExternalLinkTypeController;
 use App\Http\Controllers\HomeController;
@@ -196,7 +197,7 @@ Route::middleware(['2fa'])->group(function () {
         Route::post("/{id}/update", [ExpenseController::class, 'update'])->name("update");
         Route::post("/{id}/delete", [ExpenseController::class, 'delete'])->name("delete");
         Route::get('/expenses/search-items', [ExpenseController::class, 'searchItems'])->name('search-items');
-
+        Route::post('/approve/{expenseId}', [ExpenseApprovalController::class, 'approveExpense'])->name('approve');
     });
 
     //Items (expense) route

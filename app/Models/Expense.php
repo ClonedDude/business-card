@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Expense extends Model
 {
-    protected $fillable = ['user_id', 'expense_name', 'total_amount', 'currency', 'additional_details','date_of_expense'];
+    protected $fillable = ['user_id', 'expense_name', 'total_amount', 'currency', 'additional_details','date_of_expense', 'company_id', 'approval'];
 
     // Define the relationship (expense -> many expense items)
   
@@ -16,6 +16,11 @@ class Expense extends Model
     public function expenseItems()
     {
         return $this->hasMany(ExpenseTransactionItem::class, 'expense_id', 'id');
+    }
+
+    public function approvals()
+    {
+        return $this->morphMany(ExpenseApproval::class, 'approvalable');
     }
     
     

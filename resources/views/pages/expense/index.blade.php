@@ -15,20 +15,19 @@
                         </a>
                     </div>
                 </div>
-
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="company-table" class="table table-rounded table-striped border gy-7 gs-7">
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>Expense ID</th>
-                                    <th>Expense Name</th>
-                                    <th>Additional Details</th>
-                                    <th>Total Amount</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Details</th>
+                                    <th>Total</th>
                                     <th>Currency</th>
-                                    <th>Date of Expense</th>
-                                    <th>User ID</th>
+                                    <th>Date</th>
+                                    <th>User_ID</th>
                                     <th>Approval</th>
                                     <th>Action</th>
                                 </tr>
@@ -70,7 +69,7 @@
                 { data: 'total_amount', name: 'total_amount'},
                 { data: 'currency', name: 'currency'},
                 { data: 'date_of_expense', name: 'date_of_expense'},
-                { data: 'user_ID', name: 'user_ID'},
+                { data: 'user_id', name: 'user_id'},
                 { data: 'approval', name: 'approval'},
                 { data: 'action', name: 'action'},
             ],
@@ -91,8 +90,34 @@
 </script>
 
 <script>
+    $(document).ready(function() {
+    // Use event delegation for dynamically generated approve buttons
+    $('#company-table').on('click', '.btn-approve', function() {
+        let expenseId = $(this).data('id');
+
+        // Call approve function via AJAX
+        $.ajax({
+            url: '/expenses/approve/' + expenseId,
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                alert(response.message);
+                // Optionally refresh the table or change button state
+                $('#company-table').DataTable().ajax.reload();
+            },
+            error: function(xhr) {
+                alert('Error approving expense: ' + xhr.responseText);
+            }
+        });
+    });
     $('#role-filter').on('change', function() {
         $('#company-table').DataTable().draw();
     });
+
+    });
+
+    
 </script>
 @endpush

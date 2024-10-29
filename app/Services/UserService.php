@@ -8,13 +8,17 @@ use App\Models\User;
 class UserService {
     public function createUser(array $data)
     {
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
         $validated = Validator::make($data, [
             "name" => ["required"],
             "email" => ["required"],
             "password" => ["required", "confirmed"],
             "company_ids" => ["required", "array"],
             "company_ids.*" => ["required", "exists:companies,id"],
-            "profile_picture" => ["sometimes", "image", "max:8192", "nullable"]
+            "profile_picture" => ["sometimes", "image", "max:8192", "nullable"],
+            "created_at" => ["required"],
+            "updated_at" => ["required"],
         ])->validate();
 
         $user = User::create($validated);

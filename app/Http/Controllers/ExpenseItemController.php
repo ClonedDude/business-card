@@ -88,7 +88,7 @@ class ExpenseItemController extends Controller
 
     public function store(Request $request, ExpenseItemService $expenseItemService)
     {
-        $items = $expenseItemService->createItem($request->all());
+        $expenseItemService->createItem($request->all());
 
         return redirect(route("items.index"))
             ->with("success", "user created successfully");

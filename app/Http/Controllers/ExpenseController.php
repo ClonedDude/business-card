@@ -6,6 +6,8 @@ use App\Models\Expense;
 use App\Models\ExpenseItem;
 use App\Services\ExpenseService;
 use App\Models\ExpenseTransactionItem;
+use App\Models\ExpenseApproval;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -47,8 +49,8 @@ class ExpenseController extends Controller
             ->addColumn("date_of_expense", content: function ($row) {
                 return $row->date_of_expense;
             })
-            ->addColumn("user_ID", content: function ($row) {
-                return $row->user_ID;
+            ->addColumn("user_id", content: function ($row) {
+                return $row->user_id;
             })
             ->addColumn("approval", content: function ($row) {
                 if ($row->approval == 0) {
@@ -61,21 +63,24 @@ class ExpenseController extends Controller
             ->addColumn("action", function ($row) {
                 $detail_button
                     = '<a href="'.route('expenses.show', $row->id).'" class="btn btn-sm btn-primary me-2 mb-4">
-                        <i class="fas fa-eye"></i>
                         Detail
                     </a>';
 
                 $edit_button
                     = '<a href="'.route('expenses.edit', $row->id).'" class="btn btn-sm btn-info me-2 mb-4">
-                        <i class="fas fa-edit"></i>
                         Edit
                     </a>';
+                
+                $approve_button 
+                    = '<button type="button" id="aprroval-btn" class="btn btn-sm btn-success me-2 mb-4 btn-approve" data-id="'.$row->id.'" '.($row->approval ? 'disabled style="color:grey;"' : '').'>
+                    '.($row->approval ? 'Approved' : 'Approve').' 
+                   </button>';
+                
 
                 $delete_button
                     = '<form class="delete-training-form" action="'.route('expenses.delete', $row->id).'" method="POST">
                         '.csrf_field().'
                         <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
-                        <i class="fas fa-trash"></i>
                         Delete</button>
                     </form>';
 
@@ -83,6 +88,7 @@ class ExpenseController extends Controller
                     $detail_button
                     $edit_button
                     $delete_button
+                    $approve_button
                 </div>";
 
                 return $html;
@@ -154,12 +160,18 @@ class ExpenseController extends Controller
     }
 
     public function show($id)
-{
-    // Use eager loading to load the related expense items
-    $expense = Expense::with('expenseItems.item')->findOrFail($id);  // Eager load the expenseItems
+    {
+        // Use eager loading to load the related expense items
+        $expense = Expense::with('expenseItems.item')->findOrFail($id);  // Eager load the expenseItems
 
-    return view('pages.expense.show', compact('expense'));
-}
+        return view('pages.expense.show', compact('expense'));
+    }
+
+    public function approve($id) 
+    {
+        $expense = Expense::with('expenseItems')->find($id); // Load expense and its items
+        $approve = $expense->approveExpense();
+    }
 
 
 }

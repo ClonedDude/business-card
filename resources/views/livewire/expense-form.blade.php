@@ -30,8 +30,16 @@
     <div class="form-group mb-4">
         <label class="text-capitalize" for="approval-input">Approval</label>
         <select id="approval-input" class="form-select h-100" name="approval" required>
+        @if($expense != null) {{-- for expense view --}}
+            @if($expense->approval=0)
             <option value="1">Approved</option>
+            @elseif($expense->approval=1)
             <option value="0">Not Approved</option>
+            @endif
+        @else() { {{-- For expense create --}}
+            <option selected value="0">Not Approved</option>
+        }
+        @endif
         </select>
         @error('approval')
         <span class="invalid-feedback d-block">{{ $message }}</span>
@@ -58,10 +66,10 @@
                     @foreach($expense->expenseItems as $i => $item)
                         <tr id="row{{ $i }}">
                             <td>
-                                <label for="search-item_{{ $i }}">Item</label>
-                                <input type="text" id="search-item_{{ $i }}" class="form-control search-item" list="item-options_{{ $i }}" placeholder="Type to search items">
-                                <input type="hidden" name="items[{{ $i }}][item_id]" id="item_id_{{ $i }}" value="">
-                                <datalist id="item-options_{{ $i }}"></datalist>  <!-- Datalist for search results -->
+                                <input type="text" id="search-item_{{ $i }}" class="form-control search-item"  list="item-options_{{ $i }}" placeholder="Type to search items" 
+                                value="{{ $item->item->name}}"> <!-- Pre-fill with the item name -->                                
+                                <input type="hidden" name="items[{{ $i }}][item_id]" id="item_id_{{ $i }}"  value="{{ $item->item->id }}">
+                                <datalist data-id="{{ $item->item->id }}" id="item-options_{{ $i }}"></datalist>  <!-- Datalist for search results -->
                             </td>
                             <td>
                                 <input type="number" name="items[{{ $i }}][price]" id="price_{{ $i }}" class="price-input" placeholder="Price" value="{{ $item->price }}" readonly required>
@@ -109,16 +117,14 @@
             i = 1;
         }
         
-
         // Add new item input row on button click
         $('#add').click(function() {
             $('#dynamic_field').append(`
                 <tr id="row${i}">
                      <td>
-                        <label for="search-item_${i}">Item</label>
                         <input type="text" id="search-item_${i}" class="form-control search-item" list="item-options_${i}" placeholder="Type to search items">
                         <input type="hidden" name="items[${i}][item_id]" id="item_id_${i}" value="">
-                        <datalist id="item-options_${i}"></datalist>  <!-- Datalist for search results -->
+                        <datalist id="item-options_${i}"> </datalist>  <!-- Datalist for search results -->
                         </td>
                     <td>
                         <input type="number" name="items[${i}][price]" id="price_${i}" class="price-input" placeholder="Price" readonly required>
@@ -227,6 +233,11 @@
         }
     });
 
+    // Highlight search input on click for easier editing
+    $(document).on('click', '.search-item', function() {
+        $(this).select();  // Selects all text in the input for easy editing
+        });
+
 
     $(document).on('keyup', '.search-item', function() {
         const query = $(this).val();  // User's input value
@@ -245,7 +256,7 @@
                     // Add each item as an option in the datalist
                     response.items.forEach(item => {
                         datalist.append(`
-                            <option data-id="${item.id}" data-price="${item.price}" data-currency="${item.currency}" value="${item.name} - ${item.currency}${item.price}">
+                            <option data-id="${item.id}" data-price="${item.price}" data-currency="${item.currency}" value="${item.name}">
                         `);
                     });
                 }
@@ -345,5 +356,6 @@
         $('#currency').val(`${currency}`);
     }
 
+    
     });
 </script>

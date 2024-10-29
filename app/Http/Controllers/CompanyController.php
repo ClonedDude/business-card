@@ -96,7 +96,7 @@ class CompanyController extends Controller
 
     public function update(Request $request, CompanyService $companyService, int $id)
     {
-        $company = $companyService->updateCompany($id, $request->all());
+        $companyService->updateCompany($id, $request->all());
 
         return redirect(route("companies.index"))
             ->with("success", "company updated successfully");

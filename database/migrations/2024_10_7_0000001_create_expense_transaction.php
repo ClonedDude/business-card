@@ -21,6 +21,7 @@ return new class extends Migration
             $table->decimal('total_amount', 10, 2); // Total amount spent
             $table->string('currency', 3); // Currency (e.g., USD, EUR)
             $table->date('date_of_expense'); // Date of the expense
+            $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
             $table->boolean('approval')->default(0); // Approval status
             $table->timestamps();  // created_at and updated_at columns
         });

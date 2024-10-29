@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\ExpenseItem;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class ExpenseItemForm extends Component
@@ -30,20 +31,8 @@ class ExpenseItemForm extends Component
             $this->updated_at = $item->updated_at;
 
            
-            $this->users = User::select("*")
-            ->get();
-            if ($this->users->count() > 1) {
-                $this->user_id = $this->contact->user_id;
-                $this->updatedUserId();
-            }
-        } else {
-            $this->users = User::select("*")
-                ->get();
-
-            if ($this->users->count() > 1) {
-                $this->user_id = $this->users->first()->id;
-                $this->updatedUserId();
-            }
+            $this->users = Auth::user();
+           
         }
         
     }
