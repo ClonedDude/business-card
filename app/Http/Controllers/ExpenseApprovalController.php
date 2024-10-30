@@ -44,4 +44,25 @@ class ExpenseApprovalController extends Controller
         
         return response()->json(['message' => 'Expense approved successfully.']);
     }
+
+    public function rejectExpense($expenseId) {
+        // Find the expense by ID
+        $expense = Expense::find($expenseId);
+
+        // Check if expense exists
+        if (!$expense) {
+            return response()->json(['error' => 'Expense not found.'], 404);
+        }
+
+        //Set expense approval status to rejected E.g. 0 = unapproved/ 1 = approved / 2 = rejected
+        $expense->update([
+            'approval' => 2, 
+            'updated_at' => now()
+        ]);
+
+        ExpenseApproval::where('expense_id', $expenseId)->delete(); //Delete expense approval 
+        
+        return redirect()->route('expenses.index')
+                           ->with('success', 'Expense has been successfully added.');
+    }
 }

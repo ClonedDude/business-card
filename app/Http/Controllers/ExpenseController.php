@@ -7,6 +7,10 @@ use App\Models\ExpenseItem;
 use App\Services\ExpenseService;
 use App\Models\ExpenseTransactionItem;
 use App\Models\ExpenseApproval;
+use App\Models\CompanyUser;
+use App\Models\User;
+
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +23,9 @@ class ExpenseController extends Controller
 {
     public function index()
     {
-        return view("pages.expense.index");
+        $company = CompanyUser::all();
+        $user = Auth::user();
+        return view("pages.expense.index", compact('company', 'user'));
     }
 
 
@@ -54,10 +60,13 @@ class ExpenseController extends Controller
             })
             ->addColumn("approval", content: function ($row) {
                 if ($row->approval == 0) {
-                    return "Not approved";
+                    return "Pending";
                 }
                 elseif ($row->approval == 1) {
                     return "Approved";
+                }
+                elseif ($row->approval == 2) {
+                    return "Rejected";
                 }
             })
             ->addColumn("action", function ($row) {
@@ -70,15 +79,43 @@ class ExpenseController extends Controller
                     = '<a href="'.route('expenses.edit', $row->id).'" class="btn btn-sm btn-info me-2 mb-4">
                         Edit
                     </a>';
+
+                //Pending
+                if ($row->approval == 0) {
+                    $approve_button 
+                    = '<button type="button" id="approval-btn" class="btn btn-sm me-2 mb-4 btn-success btn-approve" data-id="'. $row->id.'">
+                    Pending
+                    </button>';
+                }
+
+                //Approved
+                if ($row->approval == 1) {
+                    $approve_button 
+                    = '<button type="button" id="approved-btn" class="btn btn-sm me-2 mb-4 disabled btn-success disabled style="color:grey">
+                    Approved
+                    </button>';
+                }
+
+                //Rejected
+                if ($row->approval == 2) {
+                    $approve_button 
+                    = '<button type="button" id="rejected-btn" class="btn btn-sm me-2 mb-4 btn-warning" style="color:grey" disabled>
+                        Rejected
+                    </button>';
+                }
                 
-                $approve_button 
-                    = '<button type="button" id="aprroval-btn" class="btn btn-sm btn-success me-2 mb-4 btn-approve" data-id="'.$row->id.'" '.($row->approval ? 'disabled style="color:grey;"' : '').'>
-                    '.($row->approval ? 'Approved' : 'Approve').' 
-                   </button>';
-                
+                    
+                 // Conditionally define $reject_button only when approval is pending (0)
+                $reject_button = '';
+                if ($row->approval == 0) {
+                $reject_button = '<form class="reject-expense-form" action="'.route('expenses.reject', $row->id).'" method="POST" onsubmit="return confirm(\'Reject this expense?\')">
+                '.csrf_field().'
+                <button type="submit" class="btn btn-sm btn-warning me-2 mb-4">Reject</button>
+                </form>';
+                }
 
                 $delete_button
-                    = '<form class="delete-training-form" action="'.route('expenses.delete', $row->id).'" method="POST">
+                    = '<form class="delete-training-form" action="'.route('expenses.delete', $row->id).'" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this expense? This action cannot be undone.\')">
                         '.csrf_field().'
                         <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
                         Delete</button>
@@ -89,6 +126,7 @@ class ExpenseController extends Controller
                     $edit_button
                     $delete_button
                     $approve_button
+                    $reject_button
                 </div>";
 
                 return $html;

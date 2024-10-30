@@ -14,7 +14,7 @@ class ExpenseSeeder extends Seeder
      */
     public function run(): void
     {
-        Expense::create([
+        Expense::firstOrCreate([
             'user_id' => 1,
             'company_id' => 1,
             'expense_name' => 'Office Supplies',
@@ -27,7 +27,7 @@ class ExpenseSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        Expense::create([
+        Expense::firstOrCreate([
             'user_id' => 1,
             'company_id' => 1,
             'expense_name' => 'IT Equipment',
@@ -40,7 +40,7 @@ class ExpenseSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        Expense::create([
+        Expense::firstOrCreate([
             'user_id' => 1,
             'company_id' => 1,
             'expense_name' => 'Marketing Materials',

@@ -9,11 +9,21 @@
                     <div class="card-title">
                         Expense list
                     </div>
-                    <div class="card-toolbar">
-                        <a href="{{ route('expenses.create') }}" class="btn btn-sm btn-primary">
+                    <!-- Check if user is in company-->
+                    @if ($company->contains('user_id', $user->id))
+                        <div class="card-toolbar">
+                            <a href="{{ route('expenses.create') }}" class="btn btn-sm btn-primary">
                             Create
-                        </a>
+                            </a>
+                        </div>
+                    @else
+                   <!--If user not in company--> 
+                    <div class="card-toolbar">
+                        <button class="btn btn-sm btn-primary btn-create-expense" style="color:grey;">
+                        Create
+                        </button>
                     </div>
+                    @endif
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -75,7 +85,7 @@
             ],
             dom:
             "<'row'" +
-            "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
+            "<'col-sm-6 d-flex align-items-center justify-content-start'l>" +
             "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
             ">" +
 
@@ -112,11 +122,48 @@
             }
         });
     });
+
+    $('.btn-create-expense').on('click', function() {
+        alert('User must be in a company to create expenses');
+    });
+
     $('#role-filter').on('change', function() {
         $('#company-table').DataTable().draw();
     });
 
+     $('#company-table').on('click', '.btn-delete', function(e) {
+        e.preventDefault(); // Prevent default form submission
+
+        let expenseId = $(this).data('id');
+        let deleteUrl = '/expenses/delete/' + expenseId; // Replace with the correct delete route if different
+
+        // Show a confirmation dialog
+        if (confirm("Are you sure you want to delete this expense? This action cannot be undone.")) {
+            // If confirmed, proceed with the delete request
+            $.ajax({
+                url: deleteUrl,
+                method: 'DELETE',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    alert(response.message);
+                    // Optionally refresh the table or update the UI
+                    $('#company-table').DataTable().ajax.reload();
+                },
+                error: function(xhr) {
+                    alert('Error deleting expense: ' + xhr.responseText);
+                }
+            });
+        } else {
+            // If canceled, do nothing
+            return false;
+        }
     });
+
+    });
+
+
 
     
 </script>

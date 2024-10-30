@@ -42,10 +42,12 @@
     <div class="d-flex flex-row justify-content-between p-4 border-bottom">
         <div class="text-capitalize">Approval: </div>
             <div> 
-                @if($expense->approval=0)
-                <p>Not approved</p>
-                @elseif($expense->approval=1)
+                @if($expense->approval==0)
+                <p>Pending</p>
+                @elseif($expense->approval==1)
                 <p>Approved</p>
+                @elseif($expense->approval==2)
+                <p>Rejected</p>
                 @endif
             </div>
     </div>

@@ -22,6 +22,5 @@ class Expense extends Model
     {
         return $this->morphMany(ExpenseApproval::class, 'approvalable');
     }
-    
-    
+       
 }

@@ -198,6 +198,7 @@ Route::middleware(['2fa'])->group(function () {
         Route::post("/{id}/delete", [ExpenseController::class, 'delete'])->name("delete");
         Route::get('/expenses/search-items', [ExpenseController::class, 'searchItems'])->name('search-items');
         Route::post('/approve/{expenseId}', [ExpenseApprovalController::class, 'approveExpense'])->name('approve');
+        Route::post('/reject/{expenseId}', [ExpenseApprovalController::class, 'rejectExpense'])->name('reject');
     });
 
     //Items (expense) route

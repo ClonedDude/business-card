@@ -26,7 +26,6 @@ class ExpenseService {
 
         $request['user_id'] = $user->id;
         $company = CompanyUser::where('user_id', $user->id)->first();
-        
         $companyID = $company ? $company->id : null;
         $request['company_id'] = $companyID;
 
