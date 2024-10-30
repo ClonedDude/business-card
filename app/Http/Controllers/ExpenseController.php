@@ -84,7 +84,7 @@ class ExpenseController extends Controller
                 if ($row->approval == 0) {
                     $approve_button 
                     = '<button type="button" id="approval-btn" class="btn btn-sm me-2 mb-4 btn-success btn-approve" data-id="'. $row->id.'">
-                    Pending
+                    Approve
                     </button>';
                 }
 
@@ -108,9 +108,8 @@ class ExpenseController extends Controller
                  // Conditionally define $reject_button only when approval is pending (0)
                 $reject_button = '';
                 if ($row->approval == 0) {
-                $reject_button = '<form class="reject-expense-form" action="'.route('expenses.reject', $row->id).'" method="POST" onsubmit="return confirm(\'Reject this expense?\')">
-                '.csrf_field().'
-                <button type="submit" class="btn btn-sm btn-warning me-2 mb-4">Reject</button>
+                $reject_button 
+                = '<button type="submit" class="btn btn-sm btn-warning me-2 mb-4 btn-reject" data-id="'. $row->id . '">Reject</button>
                 </form>';
                 }
 

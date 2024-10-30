@@ -11,7 +11,7 @@
     {{-- Additional details input --}}
     <div class="form-group mb-4">
         <label class="text-capitalize" for="additional_details-input">Additional Details</label>
-        <input class="form-control" type="text" name="additional_details" id="additional_details-input" value="{{ old('additional_details', $additional_details) }}">
+        <input class="form-control details" type="text" name="additional_details" id="additional_details-input" value="{{ old('additional_details', $additional_details) }}">
         @error('additional_details')
         <span class="invalid-feedback d-block">{{ $message }}</span>
         @enderror

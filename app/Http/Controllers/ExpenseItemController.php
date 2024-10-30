@@ -56,13 +56,11 @@ class ExpenseItemController extends Controller
             ->addColumn("action", function ($row) {
                 $detail_button
                     = '<a href="'.route('items.show', $row->id).'" class="btn btn-sm btn-primary me-2 mb-4">
-                        <i class="fas fa-eye"></i>
                         Detail
                     </a>';
 
                 $edit_button
                     = '<a href="'.route('items.edit', $row->id).'" class="btn btn-sm btn-info me-2 mb-4">
-                        <i class="fas fa-edit"></i>
                         Edit
                     </a>';
 
@@ -70,7 +68,6 @@ class ExpenseItemController extends Controller
                     = '<form class="delete-training-form" action="'.route('items.delete', $row->id).'" method="POST">
                         '.csrf_field().'
                         <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
-                        <i class="fas fa-trash"></i>
                         Delete</button>
                     </form>';
 

@@ -101,7 +101,8 @@
 
 <script>
     $(document).ready(function() {
-    // Use event delegation for dynamically generated approve buttons
+    
+    //For approving button script
     $('#company-table').on('click', '.btn-approve', function() {
         let expenseId = $(this).data('id');
 
@@ -122,6 +123,28 @@
             }
         });
     });
+
+    //For rejecting button script
+    $('#company-table').on('click', '.btn-reject', function() {
+        let expenseId = $(this).data('id');
+        // Call approve function via AJAX
+        $.ajax({
+            url: '/expenses/reject/' + expenseId,
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                alert(response.message);
+                // Optionally refresh the table or change button state
+                $('#company-table').DataTable().ajax.reload();
+            },
+            error: function(xhr) {
+                alert('Error approving expense: ' + xhr.responseText);
+            }
+        });
+    });
+
 
     $('.btn-create-expense').on('click', function() {
         alert('User must be in a company to create expenses');

@@ -62,7 +62,6 @@ class ExpenseApprovalController extends Controller
 
         ExpenseApproval::where('expense_id', $expenseId)->delete(); //Delete expense approval 
         
-        return redirect()->route('expenses.index')
-                           ->with('success', 'Expense has been successfully added.');
+        return response()->json(['message' => 'Expense rejected successfully.']);
     }
 }
