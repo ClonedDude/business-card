@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="card-body">
-                    @livewire('external-link-type-table')
+                    @livewire("external-link-type-table")
                 </div>
             </div>
         </div>

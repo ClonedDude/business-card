@@ -10,19 +10,19 @@ class ExternalLinkController extends Controller
 {
     public function index()
     {
-        return view("welcome");
+        return view("pages.external-link-type.index");
     }
 
     public function show($id)
     {
         $external_link = ExternalLink::findOrFail($id);
 
-        return view("welcome", compact("external_link"));
+        return view("pages.external-link-type.index", compact("external_link"));
     }
 
     public function create()
     {
-        return view("welcome");
+        return view("pages.external-link-type.create");
     }
 
     public function store(Request $request, ExternalLinkService $externalLinkService)
@@ -35,7 +35,7 @@ class ExternalLinkController extends Controller
 
     public function edit()
     {
-        return view("welcome");
+        return view("pages.external-link-type.edit");
     }
 
     public function update(Request $request, ExternalLinkService $externalLinkService, int $id)

@@ -84,30 +84,7 @@
   background-color: #f1f1f1;
 }
 
-/* For expense index table */
-
-/* Improved table header styling */
-/* Body cell styling */
-table#company-table tbody td {
+#company-table th {
   text-align: center;
-  padding: 10px 8px;
-  vertical-align: middle;
-  border-bottom: 1px solid #dee2e6;
+  vertical-align: top !important;
 }
-
-/* Hover effect for table rows */
-table#company-table tbody tr:hover {
-  background-color: #f1f1f1;
-}
-
-table#company-table thead th {
-  background-color: #f8f9fa; /* Light background color */
-  color: #333; /* Darker text for contrast */
-  font-weight: bold;
-  text-align: center; /* Center-align text */
-  vertical-align: middle;
-  word-wrap: break-word; /* Ensures content wraps if it's too long */
-}
-
-
-

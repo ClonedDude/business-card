@@ -30,14 +30,13 @@
                         <table id="company-table" class="table table-rounded table-striped border gy-7 gs-7">
                             <thead>
                                 <tr>
-                                    <th></th>
-                                    <th>ID</th>
+                                    <th id="header-id">ID</th>
                                     <th>Name</th>
-                                    <th>Details</th>
+                                    <th>Description</th>
                                     <th>Total</th>
                                     <th>Currency</th>
                                     <th>Date</th>
-                                    <th>User_ID</th>
+                                    <th>User-ID</th>
                                     <th>Approval</th>
                                     <th>Action</th>
                                 </tr>
@@ -72,7 +71,6 @@
                 }
             },
             columns: [
-                { data: 'placeholder', name: 'placeholder'}, //logo placeholder
                 { data: 'expense_id', name: 'expense_id'},
                 { data: 'expense_name', name: 'expense_name'},
                 { data: 'additional_details', name: 'additional_details'},
@@ -154,7 +152,7 @@
         $('#company-table').DataTable().draw();
     });
 
-     $('#company-table').on('click', '.btn-delete', function(e) {
+    $('#company-table').on('click', '.btn-delete', function(e) {
         e.preventDefault(); // Prevent default form submission
 
         let expenseId = $(this).data('id');

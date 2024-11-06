@@ -32,9 +32,11 @@
         <select id="approval-input" class="form-select h-100" name="approval" required>
         @if($expense != null) {{-- for expense view --}}
             @if($expense->approval=0)
-            <option value="1">Approved</option>
+                <option value="0">Pending</option>
             @elseif($expense->approval=1)
-            <option value="0">Not Approved</option>
+                <option value="1">Approve</option>
+            @elseif($expense->approval=2)
+                <option value="2">Not approve</option>
             @endif
         @else() { {{-- For expense create --}}
             <option selected value="0">Not Approved</option>
@@ -97,7 +99,11 @@
 
         {{-- Grand total display --}}
         <div class="grand-total-container">
-            <span id="grand_total_display" class="grand-total">Grand total: {{  number_format($grandtotal, 2) }}</span>
+            <span id="grand_total_display" class="grand-total">
+                Grand total: 
+                {{ optional($expense)->currency }}
+                {{  number_format($grandtotal, 2) }}
+            </span>
             <input type="number" id="total_amount" name="total_amount" value readonly hidden>
             <input class="form-control" type="text" id="currency" name="currency" readonly hidden>
         </div>

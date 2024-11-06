@@ -22,10 +22,10 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>Item ID</th>
-                                    <th>Item Name</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
                                     <th>Description</th>
-                                    <th>Company ID</th>
+                                    <th>Company-ID</th>
                                     <th>Price</th>
                                     <th>Currency</th>
                                     <th>Created at</th>

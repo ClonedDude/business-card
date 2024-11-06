@@ -48521,10 +48521,11 @@ span.flatpickr-weekday {
 .ck-body .ck-balloon-panel .ck-toolbar {
   border-radius: 0.475rem !important;
 }
-
+/*
 table.dataTable {
   width: 100% !important;
 }
+  */
 
 div.dataTables_wrapper div.dataTables_length {
   padding: 0.5rem 0;

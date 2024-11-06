@@ -64,7 +64,7 @@ class ExpenseService {
             $subtotal += $item['price'] * $item['quantity'];
 
             // Create the expense transaction item
-            ExpenseTransactionItem::create([
+            ExpenseTransactionItem::firstOrCreate([
                 'expense_id' => $expense->id,
                 'expense_item_id' => $expenseItem->id,
                 'quantity' => $item['quantity'],
@@ -110,7 +110,7 @@ class ExpenseService {
             $subtotal += $item['price'] * $item['quantity'];
 
             // Create the expense transaction item
-            ExpenseTransactionItem::create([
+            ExpenseTransactionItem::firstOrCreate([
                 'expense_id' => $id,
                 'expense_item_id' => $expenseItem->id,
                 'quantity' => $item['quantity'],
