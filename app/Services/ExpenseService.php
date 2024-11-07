@@ -26,7 +26,7 @@ class ExpenseService {
 
         $request['user_id'] = $user->id;
         $company = CompanyUser::where('user_id', $user->id)->first();
-        $companyID = $company ? $company->id : null;
+        $companyID = $company ? $company->company_id : null;
         $request['company_id'] = $companyID;
 
         $request->validate([
@@ -39,7 +39,6 @@ class ExpenseService {
             'items.*.item_id' => 'required|exists:expense_items,id',
             'items.*.quantity' => 'required|integer|min:1',
         ]);
-
 
         // Create the new expense record
         $expense = Expense::create([

@@ -34,9 +34,7 @@ class ExpenseController extends Controller
         $expense_query = Expense::select('*')->where('user_id', Auth::user()->id);
         
         return DataTables::of($expense_query)
-            ->addColumn("placeholder", function ($row) {
-                return " "; //placeholder for logo
-            })
+            
             ->addColumn("expense_id", function ($row) {
                 return $row->id;
              })

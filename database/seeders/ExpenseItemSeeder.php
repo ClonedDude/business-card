@@ -14,7 +14,7 @@ class ExpenseItemSeeder extends Seeder
      */
     public function run(): void
     {
-        $item = ExpenseItem::create([
+        ExpenseItem::create([
             'company_id' => 1,
             'name' => 'Camera Nikon X23',
             'description' => 'Camera Nikon',

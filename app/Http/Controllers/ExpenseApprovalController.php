@@ -20,7 +20,7 @@ class ExpenseApprovalController extends Controller
         $companyID = $company ? $company->id : null;
         if ($company == null  ) {
             $company = CompanyUser::where('user_id', $user->id)->first(); //under the assumption that an admin can only be in charge of one company
-            $companyID = $company ? $company->id : null;
+            $companyID = $company ? $company->company_id : null;
         }
 
         // Check if expense exists

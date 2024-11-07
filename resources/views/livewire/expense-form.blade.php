@@ -74,10 +74,10 @@
                                 <datalist data-id="{{ $item->item->id }}" id="item-options_{{ $i }}"></datalist>  <!-- Datalist for search results -->
                             </td>
                             <td>
-                                <input type="number" name="items[{{ $i }}][price]" id="price_{{ $i }}" class="price-input" placeholder="Price" value="{{ $item->price }}" readonly required>
+                                <input type="number" name="items[{{ $i }}][price]" id="price_{{ $i }}" class="price-input" placeholder="Price" value="{{ $item->price }}"  required>
                             </td>
                             <td>
-                                <input type="text" name="items[{{ $i }}][currency]" id="currency_{{ $i }}" class="currency-display" value="{{ $item->currency }}" readonly required>
+                                <input type="text" name="items[{{ $i }}][currency]" id="currency_{{ $i }}" class="currency-display" value="{{ $item->currency }}"  required>
                             </td>
                             <td>
                                 <input type="number" name="items[{{ $i }}][quantity]" id="quantity_{{ $i }}" class="form-control quantity-input" value="{{ $item->quantity }}" required>
@@ -133,10 +133,10 @@
                         <datalist id="item-options_${i}"> </datalist>  <!-- Datalist for search results -->
                         </td>
                     <td>
-                        <input type="number" name="items[${i}][price]" id="price_${i}" class="price-input" placeholder="Price" readonly required>
+                        <input type="number" name="items[${i}][price]" id="price_${i}" class="price-input" placeholder="Price" required>
                     </td>
                     <td>
-                        <input type="text" name="items[${i}][currency]" id="currency_${i}" class="currency-display" placeholder="Currency" readonly required>
+                        <input type="text" name="items[${i}][currency]" id="currency_${i}" class="currency-display" placeholder="Currency" required>
                     </td>
                     <td>
                         <input type="number" name="items[${i}][quantity]" id="quantity_${i}" class="form-control quantity-input" value="" min="1" required>
@@ -250,6 +250,7 @@
         const rowId = $(this).attr('id').split('_')[1];  // Get row index
         const datalist = $(`#item-options_${rowId}`);  // Reference to datalist for this row
 
+
         // Check if the query length is sufficient for a search
         if (query.length >= 2) {
             $.ajax({
@@ -288,11 +289,35 @@
             $(`#item_id_${rowId}`).val(itemId);
             $(`#price_${rowId}`).val(price.toFixed(2));
             $(`#currency_${rowId}`).val(currency);
+            $(`#currency_${rowId}`).prop('readonly', true); // Make currency readonly
+            $(`#price_${rowId}`).prop('readonly', true); // Make price readonly
+
 
             // Update subtotal and grand total
             const quantity = parseInt($(`#quantity_${rowId}`).val()) || 1;
             const subtotal = price * quantity;
             $(`#subtotal_${rowId}`).text(`${currency}${subtotal.toFixed(2)}`);
+            updateGrandTotal();
+        }
+        if (!selectedOption.length) {
+            const itemId = selectedOption.data('id');
+            const price = parseFloat(selectedOption.data('price')) || 0;
+            const currency = selectedOption.data('currency');
+
+            // If empty, make price and currency inputs editable
+            $(`#price_${rowId}`).prop('readonly', false);
+            $(`#currency_${rowId}`).prop('readonly', false);
+
+            // Clear hidden item ID, price, currency. and quantity values
+            $(`#item_id_${rowId}`).val('');
+            $(`#price_${rowId}`).val('');
+            $(`#currency_${rowId}`).val('');
+            $(`#quantity_${rowId}`).val('');
+
+            // Update subtotal and grand total
+            const quantity = parseInt($(`#quantity_${rowId}`).val()) || 1;
+            const subtotal = price * quantity;
+            $(`#subtotal_${rowId}`).text(`${currency ? currency : ''}${subtotal.toFixed(2)}`);
             updateGrandTotal();
         }
     });

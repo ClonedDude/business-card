@@ -18,6 +18,7 @@ use App\Http\Controllers\SubscriptionPlanController;
 use App\Http\Controllers\SubscriptionPlanRuleController;
 use App\Http\Controllers\SubscriptionRuleController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,7 +46,7 @@ use Illuminate\Support\Facades\Route;
 Route::get("/c/{contact_code}", [PublicContactController::class, 'show'])->name("public-contact-detail");
 Route::get("/c/{contact_code}/download-vcard", [PublicContactController::class, 'download'])->name("public-download-vcard");
 
-Route::middleware(['2fa'])->group(function () {
+Route::middleware(['auth','2fa'])->group(function () {
     Route::get('/', function () {
         return view('welcome');
     });
@@ -229,6 +230,8 @@ Route::middleware(['2fa'])->group(function () {
     Route::post('/2fa', function () {
         return redirect(route('home'));
     })->name('2fa');
+
+    
 });
 
 Auth::routes();
