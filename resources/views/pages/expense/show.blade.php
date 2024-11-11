@@ -8,10 +8,15 @@
                     <div class="card-header">
                         <div class="card-title">
                             <h3 class="card-label">Expense</h3>
+                            <div class="card-toolbar">
+                                <a href="{{ route('expenses.create') }}" class="btn btn-sm btn-primary">
+                                Create
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <x-expense-detail :expense="$expense" />
+                        <x-expense-detail :expense="$expense" :media="$media" />
                     </div>
                 </div>
             </div>

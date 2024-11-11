@@ -35,6 +35,11 @@
     </div>
 
     <div class="d-flex flex-row justify-content-between p-4 border-bottom">
+        <div class="text-capitalize">Company ID: </div>
+        <div>{{ $expense->company_id }}</div>
+    </div>
+
+    <div class="d-flex flex-row justify-content-between p-4 border-bottom">
         <div class="text-capitalize">Created at: </div>
         <div>{{ $expense->created_at }}</div>
     </div>
@@ -50,6 +55,19 @@
                 <p>Rejected</p>
                 @endif
             </div>
+    </div>
+
+    <div class="d-flex flex-row justify-content-between p-4 border-bottom">
+        <div class="text-capitalize">Receipt Picture: </div>
+        
+        @forelse($media as $medias)
+            <div class="receipt-picture">
+                <img src="{{ $medias->getFullUrl() }}" alt="Receipt Picture" style="max-width: 200px; height: auto;">
+            </div>
+        @empty
+            <p>No receipt pictures available.</p>
+        @endforelse
+        </div>
     </div>
 
     <div class="d-flex flex-row justify-content-between p-4 border-bottom">

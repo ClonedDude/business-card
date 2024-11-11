@@ -6,15 +6,17 @@ use App\Models\Expense;
 use App\Models\ExpenseItem;
 use App\Services\ExpenseService;
 use App\Models\ExpenseTransactionItem;
+use App\Models\ExternalLinkType;
+
 use App\Models\ExpenseApproval;
 use App\Models\CompanyUser;
 use App\Models\User;
 
 
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Yajra\DataTables\Facades\DataTables;
 
 use function Laravel\Prompts\alert;
@@ -194,12 +196,14 @@ class ExpenseController extends Controller
             ->with("success", "company deleted successfully");
     }
 
-    public function show($id)
+    public function show($id, Expense $expenseModel)
     {
         // Use eager loading to load the related expense items
         $expense = Expense::with('expenseItems.item')->findOrFail($id);  // Eager load the expenseItems
+        
+        $media = $expense->getMedia("receipt-picture");
 
-        return view('pages.expense.show', compact('expense'));
+        return view('pages.expense.show', compact('expense', 'media'));
     }
 
     public function approve($id) 

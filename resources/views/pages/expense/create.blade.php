@@ -16,6 +16,12 @@
                     <div class="row">
                         <div class="col-9">
                             @livewire("expense-form", ["expense" => null])
+                            <x-image-input
+                                title="receipt picture"
+                                name="receipt_picture"
+                                id="receipt-picture-input"
+                                height="200"
+                                />
                         </div>
                     </div>
                 </div>

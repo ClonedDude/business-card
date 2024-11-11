@@ -38,7 +38,9 @@ class ExpenseService {
             'items' => 'required|array',
             'items.*.item_id' => 'required|exists:expense_items,id',
             'items.*.quantity' => 'required|integer|min:1',
+            "receipt_picture" => ["sometimes", "image", "max:8192", "nullable"],
         ]);
+
 
         // Create the new expense record
         $expense = Expense::create([
@@ -53,6 +55,9 @@ class ExpenseService {
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        $expense->uploadReceiptPicture($request["receipt_picture"]);
+
         $subtotal = 0;
        
         // Loop through the items and save them as transaction items
@@ -128,4 +133,6 @@ class ExpenseService {
         ExpenseTransactionItem::where('expense_id', $expense->id)->delete();
         return $expense->delete();
     }
+
+    
 }
