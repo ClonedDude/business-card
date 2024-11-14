@@ -6,6 +6,13 @@
             <div class="col-12 col-md-12">
                 <div class="card card-custom">
                     <div class="card-header">
+                        <div class="card-toolbar">
+                            <a href="{{ route('companies.index') }}" class="btn btn-sm btn-primary">
+                                Back
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-header">
                         <div class="card-title">
                             <h3 class="card-label">Company</h3>
                         </div>

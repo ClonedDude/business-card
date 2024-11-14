@@ -4,6 +4,13 @@
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
         <div class="col-12 col-md-12">
+            <div class="card-header">
+                <div class="card-toolbar">
+                    <a href="{{ route('users.index') }}" class="btn btn-sm btn-primary">
+                        Back
+                    </a>
+                </div>
+            </div>
             <form action="{{ route('users.update', $user->id) }}" method="POST" class="card" enctype="multipart/form-data">
                 <div class="card-header">
                     <div class="card-title">

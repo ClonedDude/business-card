@@ -19,6 +19,7 @@ use App\Http\Controllers\SubscriptionPlanRuleController;
 use App\Http\Controllers\SubscriptionRuleController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\KeycloakController;
 
 /*
 |--------------------------------------------------------------------------
@@ -230,6 +231,11 @@ Route::middleware(['auth','2fa'])->group(function () {
     Route::post('/2fa', function () {
         return redirect(route('home'));
     })->name('2fa');
+
+    Route::get('auth/redirect', [KeycloakController::class, 'redirectToKeycloak'])->name('login');
+    Route::get('auth/callback', [KeycloakController::class, 'handleKeycloakCallback']);
+    Route::post('logout', [KeycloakController::class, 'logout'])->name('logout');
+
 
     
 });
