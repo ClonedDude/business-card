@@ -31,12 +31,4 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'keycloak' => [
-    'client_id' => env('my-laravel-app'),
-    'client_secret' => env('eExoE10Vxm0OvBa0VT8I1bUWgR2mvH4W'),
-    'redirect' => env('http://localhost:8000/auth/callback'),
-    'base_url' => env('http://localhost:8000/'),
-    'realm' => env('master'),
-],
-
 ];

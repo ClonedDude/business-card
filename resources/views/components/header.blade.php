@@ -13,14 +13,24 @@
                             fill="black" />
                     </svg>
                 </span>
-
-
             </div>
         </div>
         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-            <a href="../../demo1/dist/index.html" class="d-lg-none">
-                <img alt="Logo" src="{{ asset('assets/images/logo.png') }}" class="h-30px" />
-            </a>
+            @if (auth()->user()->companies()->count() > 1)
+                <form action="{{ route('switch-company') }}" method="POST" class="form-group d-flex flex-row">
+                    @csrf
+                    <select class="form-select form-select-lg me-2" name="company_id" id="company_id">
+                        @foreach (auth()->user()->companies()->get() as $company)
+                            <option value="{{ $company->id }}" @if (session("company_id") == $company->id) selected @endif>
+                                {{ $company->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <button class="btn btn-sm btn-primary">
+                        Switch
+                    </button>
+                </form>
+            @endif
         </div>
 
         <div class="d-flex flex-row-reverse align-items-center">
@@ -29,11 +39,10 @@
                 <div class="dropdown-menu dropdown-menu-right">
                     {{-- @livewire('notification-list')             --}}
                 </div>
-            </div>            
+            </div>
         </div>
     </div>
 </div>
 
 @push('head')
-    
 @endpush

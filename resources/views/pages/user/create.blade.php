@@ -4,13 +4,6 @@
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
         <div class="col-12 col-md-12">
-            <div class="card-header">
-                <div class="card-toolbar">
-                    <a href="{{ route('users.index') }}" class="btn btn-sm btn-primary">
-                        Back
-                    </a>
-                </div>
-            </div>
             <form action="{{ route('users.store') }}" method="POST" class="card" enctype="multipart/form-data">
                 <div class="card-header">
                     <div class="card-title">
@@ -22,6 +15,8 @@
                     @csrf
                     <div class="row">
                         <div class="col-9">
+                            <input type="hidden" name="company_id" value="{{ getPermissionsTeamId() }}">
+
                             <x-text-input
                                 title="name"
                                 name="name"
@@ -46,24 +41,34 @@
         
                             <x-text-input
                                 type="password"
-                                title="password_confirmation"
+                                title="password confirmation"
                                 name="password_confirmation"
                                 id="password-confirmation-input"
                                 required="required"
                                 />
-        
+                            
                             <x-select-input
-                                title="company"
-                                name="company_ids[]"
-                                id="company-ids-input"
+                                title="role"
+                                name="role"
+                                id="role"
                                 required="required"
-                                multiple="multiple"
+                                >
+                                @foreach ($roles as $role)
+                                    <option
+                                        value="{{ $role->name }}">  {{ $role->name }}
+                                    </option>
+                                @endforeach
+                            </x-select-input>
+                            
+                            <x-select-input
+                                title="Company"
+                                name="company_id"
+                                id="company_id"
+                                required="required"
                                 >
                                 @foreach ($companies as $company)
                                     <option
-                                        value="{{ $company->id }}"
-                                        @if (in_array($company->id, old("company_ids", []))) selected @endif>
-                                        {{ $company->name }}
+                                        value="{{ $company->id }}"> {{ $company->name }}
                                     </option>
                                 @endforeach
                             </x-select-input>

@@ -2,32 +2,34 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use App\Models\CompanyUser;
+use Spatie\Permission\Models\Role;
 
 class UserService {
     public function createUser(array $data)
-    {
+    {   
         $data['created_at'] = now();
         $data['updated_at'] = now();
         $validated = Validator::make($data, [
             "name" => ["required"],
             "email" => ["required"],
+            "role" => ["required"],
             "password" => ["required", "confirmed"],
-            "company_ids" => ["required", "array"],
-            "company_ids.*" => ["required", "exists:companies,id"],
+            "company_id" => ["required", "exists:companies,id"],
             "profile_picture" => ["sometimes", "image", "max:8192", "nullable"],
-            "created_at" => ["required"],
-            "updated_at" => ["required"],
         ])->validate();
-
+       
         $user = User::create($validated);
-
+        $role = Role::where("company_id", $validated["company_id"])->where("name", $validated["role"])->first();
+        
+        $user->companies()->attach($validated['company_id']);
+        $user->assignRole($role->name);
+        $user->syncRoles([$role]);
+        $user->uploadProfilePicture($validated["profile_picture"] ?? null);
         $user->uploadProfilePicture($validated["profile_picture"]);
-
-        if ($validated["company_ids"] ?? false){
-            $user->companies()->attach($validated["company_ids"]);
-        }
 
         return $user;
     }
@@ -35,16 +37,17 @@ class UserService {
     public function updateUser(int $id, array $data)
     {
         $user = User::find($id);
-
+        
+        $data['updated_at'] = now();
         $validated = Validator::make($data, [
             "name" => ["required"],
             "email" => ["required"],
+            "role" => ["required"],
             "password" => ["nullable", "confirmed"],
-            "company_ids" => ["required", "array"],
-            "company_ids.*" => ["required", "exists:companies,id"],
-            "profile_picture" => ["sometimes", "image", "max:8192", "nullable"]
-        ])->validate();
-        
+            "company_id" => ["required", "exists:companies,id"],
+            "profile_picture" => ["sometimes", "image", "max:8192", "nullable"],
+         ])->validate();
+
         if (empty($validated['password'])) {
             unset($validated['password']);
         }
@@ -52,9 +55,12 @@ class UserService {
         $user->update($validated);
         $user->uploadProfilePicture($validated["profile_picture"]);
 
-        if ($validated["company_ids"] ?? false) {
+        $role = Role::where("company_id", $validated["company_id"])->where("name", $validated["role"])->first();
+        $user->syncRoles($role->name);
+        
+        if ($validated["company_id"] ?? false) {
             $user->companies()->detach();
-            $user->companies()->attach($validated["company_ids"]);
+            $user->companies()->attach($validated["company_id"]);
         }
 
         return $user;

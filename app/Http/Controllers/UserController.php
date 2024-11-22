@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CompanyUser;
 use App\Models\Company;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
@@ -19,7 +23,7 @@ class UserController extends Controller
     {
         $users_query = User::select("*")
             ->with(["companies"]);
-
+        
         return DataTables::of($users_query)
             ->addColumn("companies", function ($row) {
                 $companies_html = "";
@@ -30,26 +34,44 @@ class UserController extends Controller
 
                 return $companies_html;
             })
+            
+            ->addColumn("roles", function ($row) {
+                $roles_html = "";
+    
+                foreach ($row->roles as $role) {
+                    $roles_html .= "<span class='badge bg-success m-2'>{$role->name}</span>";
+                }
+    
+                return $roles_html;
+            })
+
             ->addColumn("action", function ($row) {
                 // $detail_button
                 //     = '<a href="'.route('users.show', $row->id).'" class="btn btn-sm btn-primary me-2 mb-4">
                 //         <i class="fas fa-eye"></i>
                 //         Detail
                 //     </a>';
+                $edit_button = '';
+                $delete_button = '';
 
-                $edit_button
+                if (Auth::user()->can('users.update')) {  
+                    $edit_button
                     = '<a href="'.route('users.edit', $row->id).'" class="btn btn-sm btn-info me-2 mb-4">
                         <i class="fas fa-edit"></i>
                         Edit
                     </a>';
+                }
 
-                $delete_button
-                    = '<form class="delete-training-form" action="'.route('users.delete', $row->id).'" method="POST">
-                        '.csrf_field().'
-                        <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
-                        <i class="fas fa-trash"></i>
-                         Delete</button>
-                    </form>';
+                if (Auth::user()->can('users.delete')) {  
+
+                    $delete_button
+                        = '<form class="delete-training-form" action="'.route('users.delete', $row->id).'" method="POST">
+                            '.csrf_field().'
+                            <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
+                            <i class="fas fa-trash"></i>
+                            Delete</button>
+                        </form>';
+                }
 
                 $html = "<div class='d-flex flex-row'>
                     $edit_button
@@ -58,7 +80,10 @@ class UserController extends Controller
 
                 return $html;
             })
-            ->rawColumns(["companies", "action"])
+            
+            ->rawColumns([
+                "companies", "roles", "action"
+                ])
             ->make(true);
     }
 
@@ -71,9 +96,14 @@ class UserController extends Controller
 
     public function create()
     {
-        $companies = Company::all();
+        $companyUser = CompanyUser::where('user_id', Auth::user()->id)->get();
+        // Extract all company IDs
+        $companyIds = $companyUser->pluck('company_id');
 
-        return view("pages.user.create", compact("companies"));
+        // Retrieve the corresponding companies
+        $companies = Company::whereIn('id', $companyIds)->get();       
+        $roles = Role::where("company_id", getPermissionsTeamId())->get();
+        return view("pages.user.create", compact("companies", "roles"));
     }
 
     public function store(Request $request, UserService $userService)

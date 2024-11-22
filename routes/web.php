@@ -19,7 +19,8 @@ use App\Http\Controllers\SubscriptionPlanRuleController;
 use App\Http\Controllers\SubscriptionRuleController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\KeycloakController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -218,6 +219,24 @@ Route::middleware(['auth','2fa'])->group(function () {
         Route::post("/{id}/delete", [ExpenseItemController::class, 'delete'])->name("delete");
     });
 
+    Route::post("/switch-companies", [SessionController::class, 'switchCompany'])->name("switch-company");    
+
+
+    Route::group([
+        "prefix" => "roles",
+        "as" => "roles.",
+    ], function () {
+        Route::get("/", [RoleController::class, 'index'])->name("index");
+        Route::get("/data", [RoleController::class, 'data'])->name("data");
+        Route::get("/{id}/detail", [RoleController::class, 'show'])->name("show");
+        Route::get("/create", [RoleController::class, 'create'])->name("create");
+        Route::post("/store", [RoleController::class, 'store'])->name("store");
+        Route::get("/{id}/edit", [RoleController::class, 'edit'])->name("edit");
+        Route::post("/{id}/update", [RoleController::class, 'update'])->name("update");
+        Route::post("/{id}/delete", [RoleController::class, 'delete'])->name("delete");
+    });
+
+
 
     Route::group([
         "prefix" => "subscription-rules",
@@ -232,12 +251,7 @@ Route::middleware(['auth','2fa'])->group(function () {
         return redirect(route('home'));
     })->name('2fa');
 
-    Route::get('auth/redirect', [KeycloakController::class, 'redirectToKeycloak'])->name('login');
-    Route::get('auth/callback', [KeycloakController::class, 'handleKeycloakCallback']);
-    Route::post('logout', [KeycloakController::class, 'logout'])->name('logout');
 
-
-    
 });
 
 Auth::routes();

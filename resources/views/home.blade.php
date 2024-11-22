@@ -12,6 +12,19 @@
                 </div>
 
                 <div class="card-body">
+                    {{  $user->name }}
+                    {{  $user->id }}
+                    @foreach ($companyUsers as $companyUser)
+                    <li>
+                        Company id: {{ $companyUser->id }} - User id: {{ $companyUser->user_id ?? 'N/A' }}
+                    </li>
+                     @endforeach
+                     <p>
+                   {{ $user->roles }}
+                     </p>
+                   @can('contacts.view')
+                       Can
+                   @endcan
                 </div>
             </div>
         </div>

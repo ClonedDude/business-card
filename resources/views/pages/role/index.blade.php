@@ -7,10 +7,10 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        {{ __('User List') }}
+                        {{ __('Role List') }}
                     </div>
                     <div class="card-toolbar">
-                        <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary">
+                        <a href="{{ route('roles.create') }}" class="btn btn-sm btn-primary">
                             Create
                         </a>
                     </div>
@@ -18,13 +18,10 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="user-table" class="table table-rounded table-striped border gy-7 gs-7">
+                        <table id="role-table" class="table table-rounded table-striped border gy-7 gs-7">
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Companies</th>
-                                    <th>Role</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -48,21 +45,18 @@
 <script src="{{ asset("assets/admin/plugins/custom/datatables/datatables.bundle.js") }}"></script>
 <script>
     $(document).ready(function () {
-        $('#user-table').DataTable({
+        $('#role-table').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                url: '{{ route("users.data") }}',
+                url: '{{ route("roles.data") }}',
                 data: function (d) {
                     // d.role = $('#role-filter').val();
                 }
             },
             columns: [
                 { data: 'name', name: 'name' },
-                { data: 'email', name: 'email' },
-                { data: 'companies', name: 'companies', orderable: false, searchable: false },
-                { data: 'roles', name: 'roles', orderable: false, searchable: false },
-                { data: 'action', name: 'action', orderable: false, searchable: false }
+                { data: 'action', name: 'action'}
             ],
             dom:
             "<'row'" +
@@ -82,7 +76,7 @@
 
 <script>
     $('#role-filter').on('change', function() {
-        $('#user-table').DataTable().draw();
+        $('#role-table').DataTable().draw();
     });
 </script>
 @endpush

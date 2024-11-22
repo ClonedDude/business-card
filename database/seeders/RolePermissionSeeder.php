@@ -15,6 +15,43 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
         $admin_role = Role::create(["name" => "admin"]);
-        $user_role = Role::create(["name" => "user"]);
+
+        //View permissions
+        $admin_role->givePermissionTo(
+            'users.delete',
+            'users.view',
+            'users.store',
+            'users.update',
+
+            'expenses.delete',
+            'expenses.view',
+            'expenses.store',
+            'expenses.update',
+            
+            'contacts.delete',
+            'contacts.view',
+            'contacts.store',
+            'contacts.update',
+
+            'companies.delete',
+            'companies.view',
+            'companies.store',
+            'companies.update',
+
+            'items.delete',
+            'items.view',
+            'items.store',
+            'items.update',
+
+            'roles.delete',
+            'roles.view',
+            'roles.store',
+            'roles.update',
+
+            'external.delete',
+            'external.view',
+            'external.store',
+            'external.update',
+        );
     }
 }

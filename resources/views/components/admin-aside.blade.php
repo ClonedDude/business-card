@@ -1,5 +1,7 @@
 @php
-    $role = "admin";
+    use Illuminate\Support\Facades\Auth;
+
+    $user = Auth::user();
 @endphp
 
 <!--begin::Aside-->
@@ -52,6 +54,7 @@
                     </a>
                 </div>
 
+                @can('users.view')
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -84,7 +87,44 @@
                         </a>
                     </div>
                 </div>
+                @endcan
 
+                @can('roles.view')
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                    <span class="menu-link">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path opacity="0.3" d="M16.5 9C16.5 13.125 13.125 16.5 9 16.5C4.875 16.5 1.5 13.125 1.5 9C1.5 4.875 4.875 1.5 9 1.5C13.125 1.5 16.5 4.875 16.5 9Z" fill="currentColor"/>
+                                    <path d="M9 16.5C10.95 16.5 12.75 15.75 14.025 14.55C13.425 12.675 11.4 11.25 9 11.25C6.6 11.25 4.57499 12.675 3.97499 14.55C5.24999 15.75 7.05 16.5 9 16.5Z" fill="currentColor"/>
+                                    <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor"/>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title">Role</span>
+                        <span class="menu-arrow"></span>
+                    </span>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <a class="menu-link" href="{{ route("roles.index") }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">List Role</span>
+                        </a>
+
+                        <a class="menu-link" href="{{ route("roles.create") }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Add Role</span>
+                        </a>
+                    </div>
+                </div>
+                @endcan
+
+                @can('companies.view')
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -117,7 +157,9 @@
                         </a>
                     </div>
                 </div>
+                @endcan
 
+                @can('contacts.view')
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -150,7 +192,9 @@
                         </a>
                     </div>
                 </div>
+                @endcan
 
+                
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -184,6 +228,8 @@
                     </div>
                 </div>
 
+
+                @can('expenses.view')
                 {{-- Expense management sidebar --}}
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
@@ -232,6 +278,7 @@
                         </a>
                     </div>
                 </div>
+                @endcan
                 {{-- End of expense management --}}
 
 
