@@ -10,11 +10,13 @@
                     <div class="card-title">
                         {{ __('Contact List') }}
                     </div>
+                    @can('contacts.store')
                     <div class="card-toolbar">
                         <a href="{{ route('contacts.create') }}" class="btn btn-sm btn-primary">
                             Create
                         </a>
                     </div>
+                    @endcan
                 </div>
 
                 <div class="card-body">

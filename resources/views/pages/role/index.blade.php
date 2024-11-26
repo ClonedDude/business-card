@@ -11,11 +11,13 @@
                     <div class="card-title">
                         {{ __('Role List') }}
                     </div>
+                    @can('roles.store')
                     <div class="card-toolbar">
                         <a href="{{ route('roles.create') }}" class="btn btn-sm btn-primary">
                             Create
                         </a>
                     </div>
+                    @endcan
                 </div>
 
                 <div class="card-body">

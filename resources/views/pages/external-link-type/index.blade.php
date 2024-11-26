@@ -10,11 +10,13 @@
                     <div class="card-title">
                         {{ __('External Link Type List') }}
                     </div>
+                    @can('external.store')
                     <div class="card-toolbar">
                         <a href="{{ route('external-link-types.create') }}" class="btn btn-sm btn-primary">
                             Create
                         </a>
                     </div>
+                    @endcan
                 </div>
 
                 <div class="card-body">
