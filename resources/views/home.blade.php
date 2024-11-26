@@ -31,7 +31,7 @@
                         {{ $perm }}
                      </p>
                      @endforeach
-                   @can('users.')
+                   @can('expenses.store')
                        Can
                    @endcan
                 </div>

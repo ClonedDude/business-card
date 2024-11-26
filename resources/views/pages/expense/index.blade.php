@@ -12,7 +12,7 @@
                     </div>
                     <!-- Check if user is in company-->
                     @if ($company->contains('user_id', $user->id))
-                        @can('expenses.create')
+                        @can('expenses.store')
                             <div class="card-toolbar">
                                 <a href="{{ route('expenses.create') }}" class="btn btn-sm btn-primary">
                                 Create
@@ -20,7 +20,7 @@
                             </div>
                         @endcan
                     @else
-                    
+
                    <!--If user not in company--> 
                     <div class="card-toolbar">
                         <button class="btn btn-sm btn-primary btn-create-expense" style="color:grey;">
