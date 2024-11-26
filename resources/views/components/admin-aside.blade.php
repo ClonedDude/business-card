@@ -247,6 +247,8 @@
                         <span class="menu-title">Expense management</span>
                         <span class="menu-arrow"></span>
                     </span>
+
+                    @can('expenses.view')
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <a class="menu-link" href="{{ route("expenses.index") }}">
                             <span class="menu-bullet">
@@ -254,14 +256,18 @@
                             </span>
                             <span class="menu-title">View Expense</span>
                         </a>
+                    @endcan
 
+                    @can('expenses.store')
                         <a class="menu-link" href="{{ route("expenses.create") }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
                             <span class="menu-title">Create Expense</span>
                         </a>
+                    @endcan
 
+                    @can('items.view')
                         <a class="menu-link" href="{{ route("items.index") }}">
                         
                                <span class="menu-bullet">
@@ -269,18 +275,20 @@
                             </span>
                             <span class="menu-title">View Items</span>
                         </a>
+                    @endcan
 
+                    @can('items.store')
                         <a class="menu-link" href="{{ route("items.create") }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
                             <span class="menu-title">Create Items</span>
                         </a>
+                    @endcan
                     </div>
                 </div>
                 @endcan
                 {{-- End of expense management --}}
-
 
                 
                 <div class="menu-item">

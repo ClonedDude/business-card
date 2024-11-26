@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@can('contacts.update')
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
@@ -46,3 +47,4 @@
     </div>
 </div> 
 @endsection
+@endcan

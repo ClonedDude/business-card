@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@can('roles.view')
+
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
@@ -80,3 +82,4 @@
     });
 </script>
 @endpush
+@endcan

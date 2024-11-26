@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@can('companies.store')
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
@@ -99,3 +100,4 @@
     </div>
 </div> 
 @endsection
+@endcan

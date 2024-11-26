@@ -30,18 +30,27 @@ class CompanyController extends Controller
                 return $row->admin->name;
             })
             ->addColumn("action", function ($row) {
+                $detail_button = '';
+                $edit_button = '';
+                $delete_button = '';
+                
+                if (Auth::user()->can('companies.view')) {
                 $detail_button
                     = '<a href="'.route('companies.show', $row->id).'" class="btn btn-sm btn-primary me-2 mb-4">
                         <i class="fas fa-eye"></i>
                         Detail
                     </a>';
+                }
 
+                if (Auth::user()->can('companies.update')) {
                 $edit_button
                     = '<a href="'.route('companies.edit', $row->id).'" class="btn btn-sm btn-info me-2 mb-4">
                         <i class="fas fa-edit"></i>
                         Edit
                     </a>';
+                }
 
+                if (Auth::user()->can('companies.delete')) {
                 $delete_button
                     = '<form class="delete-training-form" action="'.route('companies.delete', $row->id).'" method="POST">
                         '.csrf_field().'
@@ -49,6 +58,7 @@ class CompanyController extends Controller
                         <i class="fas fa-trash"></i>
                         Delete</button>
                     </form>';
+                }
 
                 $html = "<div class='d-flex flex-row'>
                     $detail_button

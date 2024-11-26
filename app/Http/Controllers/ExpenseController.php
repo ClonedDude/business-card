@@ -33,7 +33,8 @@ class ExpenseController extends Controller
 
     public function data()
     {
-        $expense_query = Expense::select('*')->where('user_id', Auth::user()->id);
+        $companyId = 1;
+        $expense_query = Expense::select('*')->where('company_id', $companyId);
         
         return DataTables::of($expense_query)
             
@@ -70,15 +71,27 @@ class ExpenseController extends Controller
                 }
             })
             ->addColumn("action", function ($row) {
-                $detail_button
+                $edit_button = '';
+                $delete_button = '';
+                $reject_button = '';
+                $approve_button = '';
+                $detail_button = '';
+
+                if (Auth::user()->can('expenses.view')) {
+                    $detail_button
                     = '<a href="'.route('expenses.show', $row->id).'" class="btn btn-sm btn-primary me-2 mb-4">
                         Detail
                     </a>';
+                }
 
-                $edit_button
+                if (Auth::user()->can('expenses.update')) {
+                    $edit_button
                     = '<a href="'.route('expenses.edit', $row->id).'" class="btn btn-sm btn-info me-2 mb-4">
                         Edit
                     </a>';
+                }
+                
+                if (Auth::user()->can('expenses.approval')) {
 
                 //Pending
                 if ($row->approval == 0) {
@@ -104,14 +117,16 @@ class ExpenseController extends Controller
                     </button>';
                 }
                 
-                    
+                
                  // Conditionally define $reject_button only when approval is pending (0)
-                $reject_button = '';
+                
                 if ($row->approval == 0) {
                 $reject_button 
                 = '<button type="submit" class="btn btn-sm btn-warning me-2 mb-4 btn-reject" data-id="'. $row->id . '">Reject</button>
                 </form>';
                 }
+
+                if (Auth::user()->can('expenses.delete')) {
 
                 $delete_button
                     = '<form class="delete-training-form" action="'.route('expenses.delete', $row->id).'" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this expense? This action cannot be undone.\')">
@@ -119,7 +134,8 @@ class ExpenseController extends Controller
                         <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
                         Delete</button>
                     </form>';
-
+                }
+                }
                 $html = "<div class='d-flex flex-row'>
                     $detail_button
                     $edit_button

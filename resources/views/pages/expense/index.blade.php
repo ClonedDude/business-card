@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@can('expenses.view')
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
@@ -11,12 +12,15 @@
                     </div>
                     <!-- Check if user is in company-->
                     @if ($company->contains('user_id', $user->id))
-                        <div class="card-toolbar">
-                            <a href="{{ route('expenses.create') }}" class="btn btn-sm btn-primary">
-                            Create
-                            </a>
-                        </div>
+                        @can('expenses.create')
+                            <div class="card-toolbar">
+                                <a href="{{ route('expenses.create') }}" class="btn btn-sm btn-primary">
+                                Create
+                                </a>
+                            </div>
+                        @endcan
                     @else
+                    
                    <!--If user not in company--> 
                     <div class="card-toolbar">
                         <button class="btn btn-sm btn-primary btn-create-expense" style="color:grey;">
@@ -183,9 +187,6 @@
     });
 
     });
-
-
-
-    
 </script>
 @endpush
+@endcan

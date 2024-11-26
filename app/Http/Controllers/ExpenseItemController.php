@@ -54,23 +54,32 @@ class ExpenseItemController extends Controller
                 return $row->company_id;
             })
             ->addColumn("action", function ($row) {
+                $detail_button = '';
+                $edit_button = '';
+                $delete_button = '';
+
+                if (Auth::user()->can('items.view')) {
                 $detail_button
                     = '<a href="'.route('items.show', $row->id).'" class="btn btn-sm btn-primary me-2 mb-4">
                         Detail
                     </a>';
+                }
 
+                if (Auth::user()->can('items.update')) {
                 $edit_button
                     = '<a href="'.route('items.edit', $row->id).'" class="btn btn-sm btn-info me-2 mb-4">
                         Edit
                     </a>';
+                }
 
+                if (Auth::user()->can('items.delete')) {
                 $delete_button
                     = '<form class="delete-training-form" action="'.route('items.delete', $row->id).'" method="POST">
                         '.csrf_field().'
                         <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
                         Delete</button>
                     </form>';
-
+                }
                 $html = "<div class='d-flex flex-row'>
                     $detail_button
                     $edit_button

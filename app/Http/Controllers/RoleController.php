@@ -28,11 +28,17 @@ class RoleController extends Controller
 
             return DataTables::of($roles_query)
             ->addColumn("action", function ($row) {
+                $edit_button = '';
+                $delete_button = '';
+                
+                if (Auth::user()->can('roles.update')) {
                 $edit_button
                     = '<a href="'.route('roles.edit', $row->id).'" class="btn btn-sm px-3 btn-light me-2 mb-4" title="Edit">
                          Edit
                     </a>';
+                }
 
+                if (Auth::user()->can('roles.delete')) {
                 $delete_button
                     = (auth()->user()->can('role.delete'))
                     ? '<form class="delete-training-form" action="'.route('roles.delete', $row->id).'" method="POST">
@@ -42,6 +48,7 @@ class RoleController extends Controller
                         </button>
                     </form>'
                     : null;
+                }
 
                 $html = "<div class='d-flex flex-row'>
                     $edit_button

@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@can('items.view')
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
@@ -9,11 +10,13 @@
                     <div class="card-title">
                         Item List
                     </div>
-                    <div class="card-toolbar">
+                    @can('items.store')
+                        <div class="card-toolbar">
                         <a href="{{ route('items.create') }}" class="btn btn-sm btn-primary">
                             Create
                         </a>
-                    </div>
+                        </div>
+                    @endcan
                 </div>
 
                 <div class="card-body">
@@ -94,3 +97,4 @@
     });
 </script>
 @endpush
+@endcan

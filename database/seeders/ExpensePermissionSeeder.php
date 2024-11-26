@@ -16,6 +16,7 @@ class ExpensePermissionSeeder extends Seeder
             ["name" => "expenses.store"],
             ["name" => "expenses.update"],
             ["name" => "expenses.delete"],
+            ["name" => "expenses.approval"],
         ];
 
         foreach ($permissions_data as $permission_data) {

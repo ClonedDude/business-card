@@ -19,10 +19,19 @@
                         Company id: {{ $companyUser->id }} - User id: {{ $companyUser->user_id ?? 'N/A' }}
                     </li>
                      @endforeach
+                     
+                    @foreach ( $user->roles as $role)
                      <p>
-                   {{ $user->roles }}
+                        {{ $role }}
                      </p>
-                   @can('contacts.view')
+                     @endforeach
+
+                     @foreach ( $user->permissions as $perm)
+                     <p>
+                        {{ $perm }}
+                     </p>
+                     @endforeach
+                   @can('users.')
                        Can
                    @endcan
                 </div>

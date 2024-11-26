@@ -27,6 +27,7 @@ class RolePermissionSeeder extends Seeder
             'expenses.view',
             'expenses.store',
             'expenses.update',
+            'expenses.approval',
             
             'contacts.delete',
             'contacts.view',

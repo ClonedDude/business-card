@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@can('users.update')
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
@@ -44,6 +45,33 @@
                                 name="password_confirmation"
                                 id="password-confirmation-input"
                                 />
+
+                                <x-select-input
+                                title="role"
+                                name="role"
+                                id="role"
+                                required="required"
+                                >
+                                @foreach ($roles as $role)
+                                    <option
+                                        value="{{ $role->name }}">  {{ $role->name }}
+                                    </option>
+                                @endforeach
+                            </x-select-input>
+                            
+                            <x-select-input
+                                title="Company"
+                                name="company_id"
+                                id="company_id"
+                                required="required"
+                                >
+                                @foreach ($companies as $company)
+                                    <option
+                                        value="{{ $company->id }}"> {{ $company->name }}
+                                    </option>
+                                @endforeach
+                            </x-select-input>
+                            
                         </div>
                         <div class="col-3">
                             <x-image-input
@@ -66,3 +94,4 @@
     </div>
 </div> 
 @endsection
+@endcan

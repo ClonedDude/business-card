@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@can('contacts.view')
 @section('content')
     <div class="container-fluid">
         <div class="row px-4">
@@ -108,3 +109,4 @@
         });
     </script>
 @endpush
+@endcan
