@@ -30,14 +30,10 @@
     <div class="form-group mb-4">
         <label class="text-capitalize" for="approval-input">Approval</label>
         <select id="approval-input" class="form-select h-100" name="approval" required>
-        @if($expense != null) {{-- for expense view --}}
-            @if($expense->approval=0)
-                <option value="0">Pending</option>
-            @elseif($expense->approval=1)
-                <option value="1">Approve</option>
-            @elseif($expense->approval=2)
-                <option value="2">Not approve</option>
-            @endif
+        @if($expense != null) {{-- for expense edit view --}}
+            <option value="0" @if($expense->approval=0) selected @endif>Pending</option>
+            <option value="1" @if($expense->approval=1) selected @endif>Approved</option>
+            <option value="2" @if($expense->approval=2) selected @endif>Rejected</option>
         @else() { {{-- For expense create --}}
             <option selected value="0">Not Approved</option>
         }

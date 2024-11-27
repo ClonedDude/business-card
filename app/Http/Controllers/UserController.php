@@ -29,7 +29,7 @@ class UserController extends Controller
                 $companies_html = "";
                 
                 foreach ($row->companies as $company) {
-                    $companies_html .= "<span class='badge bg-primary m-2'>{$company->name}</span>";
+                    $companies_html .= '<a href="'.route('companies.show', $row->id).'"><span class="badge bg-primary m-2">'.$company->name.'</span></a>';
                 }
 
                 return $companies_html;
@@ -39,7 +39,7 @@ class UserController extends Controller
                 $roles_html = "";
     
                 foreach ($row->roles as $role) {
-                    $roles_html .= "<span class='badge bg-success m-2'>{$role->name}</span>";
+                    $roles_html .= '<a href="'.route('roles.edit', $row->id).'"><span class="badge bg-success m-2">'.$role->name.'</span></a>';
                 }
     
                 return $roles_html;
