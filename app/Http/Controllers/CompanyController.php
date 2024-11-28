@@ -52,7 +52,7 @@ class CompanyController extends Controller
 
                 if (Auth::user()->can('companies.delete')) {
                 $delete_button
-                    = '<form class="delete-training-form" action="'.route('companies.delete', $row->id).'" method="POST">
+                    = '<form class="delete-training-form" action="'.route('companies.delete', $row->id).'" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this company? This action cannot be undone.\')">
                         '.csrf_field().'
                         <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
                         <i class="fas fa-trash"></i>

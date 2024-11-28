@@ -52,7 +52,7 @@ class ContactController extends Controller
                     </a>';
 
                 $delete_button
-                    = '<form class="delete-training-form" action="'.route('contacts.delete', $row->id).'" method="POST">
+                    = '<form class="delete-training-form" action="'.route('contacts.delete', $row->id).'" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this contact? This action cannot be undone.\')">
                         '.csrf_field().'
                         <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
                         <i class="fas fa-trash"></i>

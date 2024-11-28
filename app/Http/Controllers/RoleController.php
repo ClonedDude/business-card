@@ -33,21 +33,19 @@ class RoleController extends Controller
                 
                 if (Auth::user()->can('roles.update')) {
                 $edit_button
-                    = '<a href="'.route('roles.edit', $row->id).'" class="btn btn-sm px-3 btn-light me-2 mb-4" title="Edit">
+                    = '<a href="'.route('roles.edit', $row->id).'" class="btn btn-sm btn-info me-2 mb-4" title="Edit">
                          Edit
                     </a>';
                 }
 
                 if (Auth::user()->can('roles.delete')) {
                 $delete_button
-                    = (auth()->user()->can('role.delete'))
-                    ? '<form class="delete-training-form" action="'.route('roles.delete', $row->id).'" method="POST">
+                    = '<form class="delete-training-form" action="'.route('roles.delete', $row->id).'" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this role? This action cannot be undone.\')">
                         '.csrf_field().'
-                        <button type="submit" class="btn btn-sm px-3 btn-light me-2 mb-4" title="Delete">  
+                        <button type="submit" class="btn btn-sm btn-danger me-2 mb-4" title="Delete">  
                             Delete
                         </button>
-                    </form>'
-                    : null;
+                    </form>';
                 }
 
                 $html = "<div class='d-flex flex-row'>

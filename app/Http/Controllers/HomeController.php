@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CompanyUser;
+use App\Models\Company;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -34,15 +35,15 @@ class HomeController extends Controller
             setPermissionsTeamId($company->id);
         }
         $user = Auth::user();
-        $companyUsers = CompanyUser::where('user_id', $user->id )->get();
-        $role = Role::all();
-
+        $companyUsers = CompanyUser::where('user_id', $user->id )->first();
+        $company = Company::where('id', $companyUsers->company_id)->get();
+        $role = $user->roles->first;
         //init for admin role for user 1
         if($user->id == 1) {
             $user->assignRole('admin');
         }
-        $perms = Permission::all();
+        $permission = Permission::all();
 
-        return view('home', compact('user', 'companyUsers', 'role', 'perms'));
+        return view('home', compact('user', 'company', 'role', 'permission'));
     }
 }
