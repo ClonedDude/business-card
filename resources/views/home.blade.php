@@ -55,14 +55,14 @@
                             <table class="table table-bordered table-striped">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th>Role</th>
-                                        <th>Permissions</th>
+                                        <th class="text-center align-middle" style="padding-left: 1em">Role</th>
+                                        <th class="text-center align-middle">Permissions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($user->roles as $role)
                                     <tr>
-                                        <td>
+                                        <td style="padding-left: 1em">
                                             <span class="badge bg-info text-dark">{{ $role->name }}</span>
                                         </td>
                                         <td>

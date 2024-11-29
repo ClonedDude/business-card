@@ -31,9 +31,9 @@
         <label class="text-capitalize" for="approval-input">Approval</label>
         <select id="approval-input" class="form-select h-100" name="approval" required>
         @if($expense != null) {{-- for expense edit view --}}
-            <option value="0" @if($expense->approval=0) selected @endif>Pending</option>
-            <option value="1" @if($expense->approval=1) selected @endif>Approved</option>
-            <option value="2" @if($expense->approval=2) selected @endif>Rejected</option>
+            <option value="0" @if($expense->approval==0) selected @endif>Pending</option>
+            <option value="1" @if($expense->approval==1) selected @endif> Approved</option>
+            <option value="2" @if($expense->approval==2) selected @endif>Rejected</option>
         @else() { {{-- For expense create --}}
             <option selected value="0">Not Approved</option>
         }
@@ -100,8 +100,8 @@
                 {{ optional($expense)->currency }}
                 {{  number_format($grandtotal, 2) }}
             </span>
-            <input type="number" id="total_amount" name="total_amount" value readonly hidden>
-            <input class="form-control" type="text" id="currency" name="currency" readonly hidden>
+            <input type="number" id="total_amount" name="total_amount" value="{{ number_format((float)($grandtotal ?? 0), 2, '.', '') }}" readonly hidden>
+            <input class="form-control" type="text" id="currency" name="currency" value="{{ $expense->currency }}" readonly hidden>
         </div>
     </div>
     </div>

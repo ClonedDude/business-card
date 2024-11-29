@@ -5,6 +5,14 @@
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
         <div class="col-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-toolbar">
+                        <a href="{{ route('roles.index') }}" class="btn btn-sm btn-primary">
+                            Back
+                        </a>
+                    </div>
+                </div>
             <form action="{{ route('roles.update', $role->id) }}" method="POST" class="card" enctype="multipart/form-data">
                 <div class="card-header">
                     <div class="card-title">
@@ -78,6 +86,7 @@
                     </button>
                 </div>
             </form>
+            </div>
         </div>
     </div>
 </div> 

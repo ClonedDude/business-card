@@ -89,16 +89,39 @@
   vertical-align: top !important;
 }
 
-.table th:last-child {
+#company-table th:last-child {
   text-align: center;
   vertical-align: top !important;
 }
 
-.table td:last-child div {
+#company-table td:last-child div {
   text-align: center;
   justify-content: center;
   align-items: center; 
 }
+
+#role-table td:last-child div {
+  text-align: center;
+  justify-content: center;
+  align-items: center; 
+}
+
+#role-table th:last-child{
+  text-align: center;
+  vertical-align: top !important;
+}
+
+#user-table td:last-child div {
+  text-align: center;
+  justify-content: center;
+  align-items: center; 
+}
+
+#user-table th:last-child{
+  text-align: center;
+  vertical-align: top !important;
+}
+
 
 
 #table-responsive th {

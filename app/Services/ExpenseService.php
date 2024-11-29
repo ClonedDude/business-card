@@ -35,9 +35,9 @@ class ExpenseService {
             'total_amount' => 'required|numeric|min:0',
             'currency' => 'required|string|max:3',
             'date_of_expense' => 'required|date',
-            'items' => 'required|array',
-            'items.*.item_id' => 'required|exists:expense_items,id',
-            'items.*.quantity' => 'required|integer|min:1',
+            'items' => 'sometimes|array',
+            'items.*.item_id' => 'sometimes|exists:expense_items,id',
+            'items.*.quantity' => 'sometimes|integer|min:1',
             "receipt_picture" => ["sometimes", "image", "max:8192", "nullable"],
         ]);
 
@@ -60,6 +60,7 @@ class ExpenseService {
 
         $subtotal = 0;
        
+        if($request->items) {
         // Loop through the items and save them as transaction items
         foreach ($request->items as $item) {
             // Find the expense item 
@@ -79,6 +80,7 @@ class ExpenseService {
                 'updated_at' => now(),
             ]);
         }
+        }
         
       }
     
@@ -90,7 +92,11 @@ class ExpenseService {
         $expense = Expense::findOrFail($id);
         $user = Auth::user();
         $request['user_id'] = $user->id;
-        
+
+        $company = CompanyUser::where('user_id', $user->id)->first();
+        $companyID = $company ? $company->company_id : null;
+        $request['company_id'] = $companyID;
+
         $validated = $request->validate([
             'expense_name' => 'required|string|max:255',
             'additional_details' => 'nullable|string|max:255',
@@ -98,16 +104,31 @@ class ExpenseService {
             'currency' => 'required|string|max:3',
             'date_of_expense' => 'required|date',
             'company_id' => 'sometimes|integer',
-            'items' => 'required|array',
-            'items.*.item_id' => 'required|exists:expense_items,id',
-            'items.*.quantity' => 'required|integer|min:1',
-            'approval' => 'required|boolean'
+            'items' => 'sometimes|array',
+            'items.*.item_id' => 'sometimes|exists:expense_items,id',
+            'items.*.quantity' => 'sometimes|integer|min:1',
+            'approval' => 'required|integer'
         ]);
+
+        //If approval is true (1), update expense approval
+        if ($validated['approval'] == 1) {
+            ExpenseApproval::create([
+                'expense_id' => $id,
+                'company_id' => $validated['company_id'],
+                'user_id' => $user->id,
+                'updated_at' => now(),
+                'created_at' => now(),
+            ]);
+        }
+        else {
+            ExpenseApproval::where('expense_id', $id)->delete();
+        }
         
         $subtotal = 0;
         ExpenseTransactionItem::where('expense_id', $id)->delete();//delete all old item transactions
 
-        foreach ($request->items as $item) {
+        if($request->items) {
+            foreach ($request->items as $item) {
             // Find the expense item 
             $expenseItem = ExpenseItem::findOrFail($item['item_id']);
             // Calculate subtotal for each item (price * quantity)
@@ -122,6 +143,7 @@ class ExpenseService {
                 'currency' => $expenseItem->currency, // Assuming currency comes from the item
                 'subtotal' => $subtotal
             ]);
+            }
         }
         return $expense->update($validated);
     }
