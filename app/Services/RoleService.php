@@ -27,12 +27,14 @@ class RoleService {
         $role = Role::find($id);
 
         $validated = Validator::make($data, [
+            "name" => ["required", "string"],
             "permissions" => ["required", "array"],
             "permissions.*" => ["required", "string"]
         ])->validate();
-
+        
+        $role->name = $validated['name'];
         $role->syncPermissions($validated["permissions"]);
-
+        $role->save();
         return $role;
     }
 
