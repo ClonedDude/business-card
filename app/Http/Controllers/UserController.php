@@ -117,11 +117,10 @@ class UserController extends Controller
     public function edit(int $id)
     {
         $user = User::find($id);
-        $companyUser = CompanyUser::where('user_id', $user);
+        $companyUser = CompanyUser::where('user_id', $user->id);
         // Extract all company IDs
         $companyIds = $companyUser->pluck('company_id');
-
-        $companies = Company::whereIn('id', $companyIds)->get();       
+        $companies = Company::where('id', $companyIds)->get();       
         $roles = Role::where("company_id", getPermissionsTeamId())->get();
         return view("pages.user.edit", compact("user", "companies", "roles"));
     }
