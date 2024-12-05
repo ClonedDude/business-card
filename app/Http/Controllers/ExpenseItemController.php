@@ -27,8 +27,7 @@ class ExpenseItemController extends Controller
 
     public function data()
     {
-        $company = CompanyUser::where('user_id', Auth::user()->id)->first();
-        $companyId = $company->id;
+        $companyId = session(('company_id'));
         $expense_item_query = ExpenseItem::where('company_id', $companyId);
         
         return DataTables::of($expense_item_query)

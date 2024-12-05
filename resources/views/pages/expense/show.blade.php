@@ -27,4 +27,9 @@
         </div>
     </div>
 @endsection
+<script>
+    $('#role-filter').on('change', function() {
+        $('#company-table').DataTable().draw();
+    });
+</script>
 @endcan
