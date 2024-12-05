@@ -34,7 +34,7 @@ class UserController extends Controller
                 $companies_html = "";
                 
                 foreach ($row->companies as $company) {
-                    $companies_html .= '<a href="'.route('companies.show', $row->id).'"><span class="badge bg-primary m-2">'.$company->name.'</span></a>';
+                    $companies_html .= '<a href="'.route('companies.show', $company->id).'"><span class="badge bg-primary m-2">'.$company->name.'</span></a>';
                 }
 
                 return $companies_html;
