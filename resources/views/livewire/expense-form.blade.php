@@ -20,7 +20,7 @@
     {{-- Date of Expense input --}}
     <div class="form-group mb-4">
         <label class="text-capitalize" for="date_of_expense-input">Date of Expense</label>
-        <input class="form-control" type="date" name="date_of_expense" id="date_of_expense-input" value="{{ old('date_of_expense', $date_of_expense) }}">
+        <input class="form-control" type="date" name="date_of_expense" id="date_of_expense-input" value="{{ old('date_of_expense', $date_of_expense) }}" required>
         @error('date_of_expense')
         <span class="invalid-feedback d-block">{{ $message }}</span>
         @enderror
@@ -101,7 +101,7 @@
                 {{  number_format($grandtotal, 2) }}
             </span>
             <input type="number" id="total_amount" name="total_amount" value="{{ number_format((float)($grandtotal ?? 0), 2, '.', '') }}" readonly hidden>
-            <input class="form-control" type="text" id="currency" name="currency" value="{{ $expense->currency }}" readonly hidden>
+            <input class="form-control" type="text" id="currency" name="currency" value="{{ optional($expense)->currency }}" readonly hidden>
         </div>
     </div>
     </div>

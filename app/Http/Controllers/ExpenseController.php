@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Expense;
 use App\Models\ExpenseItem;
 use App\Services\ExpenseService;
@@ -33,9 +34,9 @@ class ExpenseController extends Controller
 
     public function data()
     {
-        $companyId = 1;
-        $expense_query = Expense::select('*')->where('company_id', $companyId);
-        
+        $companyId = session('company_id');
+        $expense_query = Expense::where('company_id', $companyId)->get();
+
         return DataTables::of($expense_query)
             
             ->addColumn("expense_id", function ($row) {
@@ -161,12 +162,16 @@ class ExpenseController extends Controller
     public function searchItems(Request $request)
 {
     $query = $request->get('query');
+    $companyId = session('company_id');
 
-    // Fetch items that match the search query
-    $items = ExpenseItem::where('name', 'LIKE', "%{$query}%")
-                ->orWhere('description', 'LIKE', "%{$query}%")
-                ->limit(10)  // Limit the number of results
+    $items = ExpenseItem::where('company_id', $companyId) 
+                ->where(function ($q) use ($query) {
+                    $q->where('name', 'LIKE', "%{$query}%")
+                      ->orWhere('description', 'LIKE', "%{$query}%");
+                })
+                ->limit(10) 
                 ->get();
+
 
     // Return the items as JSON
     return response()->json([

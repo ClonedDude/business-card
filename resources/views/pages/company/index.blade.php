@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-@can('companies.view')
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
@@ -62,7 +61,12 @@
                 url: '{{ route("companies.data") }}',
                 data: function (d) {
                     // d.role = $('#role-filter').val();
-                }
+                },
+                error: function (xhr, error, thrown) {
+                // Show an error message
+                alert('Error fetching data: ' + xhr.responseJSON?.message || 'Unknown error occurred.');
+                console.error('Error details:', xhr.responseJSON || xhr.responseText);
+                },
             },
             columns: [
                 { data: 'logo', name: 'logo'},
@@ -97,4 +101,3 @@
     });
 </script>
 @endpush
-@endcan

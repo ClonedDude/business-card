@@ -17,14 +17,16 @@ class TeamsMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if(auth()->user()) {
+            if(Auth::user()->companies()->first()) {
             if (empty(session("company_id"))) {
                 $company = Auth::user()->companies()->first();
                 $request->session()->put('company_id', $company->id);
     
                 setPermissionsTeamId($company->id);
             }
-            
+        
             setPermissionsTeamId(session('company_id'));
+            }
         }
 
         return $next($request);

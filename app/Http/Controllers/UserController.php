@@ -21,10 +21,15 @@ class UserController extends Controller
 
     public function data()
     {
-        $users_query = User::select("*")
-            ->with(["companies"]);
-        
-        return DataTables::of($users_query)
+        $company = CompanyUser::where('user_id', Auth::user()->id)->first();
+
+        $companyId = session('company_id');
+
+        $user_query = User::whereHas('companies', function ($query) use ($companyId) {
+        $query->where('companies.id', $companyId); // Explicitly specify 'companies.id'
+        })->with('companies')->get();
+            
+        return DataTables::of($user_query)
             ->addColumn("companies", function ($row) {
                 $companies_html = "";
                 
@@ -96,13 +101,9 @@ class UserController extends Controller
 
     public function create()
     {
-        $companyUser = CompanyUser::where('user_id', Auth::user()->id)->get();
-        // Extract all company IDs
-        $companyIds = $companyUser->pluck('company_id');
-
-        // Retrieve the corresponding companies
-        $companies = Company::whereIn('id', $companyIds)->get();       
-        $roles = Role::where("company_id", getPermissionsTeamId())->get();
+        $companyIds = CompanyUser::where('user_id', Auth::user()->id)->pluck('company_id');
+        $companies = Company::whereIn('id', $companyIds)->get();
+        $roles = Role::whereIn("company_id", $companyIds)->get();
         return view("pages.user.create", compact("companies", "roles"));
     }
 
@@ -116,12 +117,10 @@ class UserController extends Controller
 
     public function edit(int $id)
     {
-        $user = User::find($id);
-        $companyUser = CompanyUser::where('user_id', $user->id);
-        // Extract all company IDs
-        $companyIds = $companyUser->pluck('company_id');
-        $companies = Company::where('id', $companyIds)->get();       
-        $roles = Role::where("company_id", getPermissionsTeamId())->get();
+        $user = User::findOrFail($id);
+        $companyIds = CompanyUser::where('user_id', $user->id)->pluck('company_id');
+        $companies = Company::whereIn('id', $companyIds)->get();
+        $roles = Role::whereIn("company_id", $companyIds)->get();
         return view("pages.user.edit", compact("user", "companies", "roles"));
     }
 

@@ -25,9 +25,8 @@ class ExpenseService {
         $user = Auth::user();
 
         $request['user_id'] = $user->id;
-        $company = CompanyUser::where('user_id', $user->id)->first();
-        $companyID = $company ? $company->company_id : null;
-        $request['company_id'] = $companyID;
+        $companyId = session('company_id');
+        $request['company_id'] = $companyId;
 
         $request->validate([
             'expense_name' => 'required|string|max:255',
@@ -48,7 +47,7 @@ class ExpenseService {
             'expense_name' => $request->expense_name,
             'additional_details' => $request->additional_details,
             'total_amount' => $request->total_amount,
-            'company_id' => $companyID,
+            'company_id' => $companyId,
             'currency' => $request->currency,
             'date_of_expense' => $request->date_of_expense,
             'approval' => $request->approval,
@@ -93,8 +92,7 @@ class ExpenseService {
         $user = Auth::user();
         $request['user_id'] = $user->id;
 
-        $company = CompanyUser::where('user_id', $user->id)->first();
-        $companyID = $company ? $company->company_id : null;
+        $companyID = session('company_id');
         $request['company_id'] = $companyID;
 
         $validated = $request->validate([

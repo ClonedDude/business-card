@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ExpenseItem;
 use App\Models\Company;
+use App\Models\CompanyUser;
 use App\Services\ExpenseItemService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,9 @@ class ExpenseItemController extends Controller
 
     public function data()
     {
-        $expense_item_query = DB::table('expense_items');
+        $company = CompanyUser::where('user_id', Auth::user()->id)->first();
+        $companyId = $company->id;
+        $expense_item_query = ExpenseItem::where('company_id', $companyId);
         
         return DataTables::of($expense_item_query)
             ->addColumn("placeholder", function ($row) {

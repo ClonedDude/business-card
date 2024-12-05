@@ -28,14 +28,15 @@ class Company extends Model implements HasMedia
         "website",
     ];
     
-    public function admin()
-    {
-        return $this->belongsTo(User::class, "admin_id");
-    }
 
     public function users()
     {
-        return $this->belongsToMany(User::class, "company_users");
+        return $this->belongsToMany(User::class, 'company_users', 'company_id', 'user_id');
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
     }
 
     public function logoUrl() : Attribute

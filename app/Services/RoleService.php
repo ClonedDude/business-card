@@ -5,6 +5,8 @@ namespace App\Services;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Models\Company;
+
 
 class RoleService {
     public function createRole(array $data)
@@ -15,8 +17,8 @@ class RoleService {
             "permissions" => ["required", "array"],
             "permissions.*" => ["required", "string"]
         ])->validate();
-
         $role = Role::create($validated);
+        
         $role->syncPermissions($validated["permissions"]);
         
         return $role;

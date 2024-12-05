@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@can('companies.store')
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
         <div class="col-12 col-md-12">
+            <div class="card">
             <div class="card-header">
                 <div class="card-toolbar">
                     <a href="{{ route('companies.index') }}" class="btn btn-sm btn-primary">
@@ -96,8 +96,8 @@
                     </button>
                 </div>
             </form>
+            </div>
         </div>
     </div>
 </div> 
 @endsection
-@endcan

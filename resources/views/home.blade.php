@@ -32,11 +32,7 @@
                                     @foreach ($company as $comp)
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             <span>
-                                                <strong>Company Name:</strong> {{ $comp->name }}
-                                            </span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            <span>
+                                                <strong>Company Name:</strong> {{ $comp->name }} <br>
                                                 <strong>Company ID:</strong> {{ $comp->id }}
                                             </span>
                                         </li>
@@ -44,6 +40,10 @@
                                 </ul>
                             @else
                                 <p>No associated companies found.</p>
+                                <form action="{{ route('companies.create') }}" method="GET">
+                                    @csrf
+                                    <button type="submit" class="btn-active">Create Company</button>
+                                </form>                            
                             @endif
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                     <!-- Roles and Permissions -->
                     <div class="mt-4">
                         <h5>Roles and Permissions</h5>
-                        @if ($user->roles->isNotEmpty())
+                        @if ($roles->isNotEmpty())
                             <table class="table table-bordered table-striped">
                                 <thead class="table-dark">
                                     <tr>
@@ -60,7 +60,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($user->roles as $role)
+                                    @foreach ($roles as $role)
                                     <tr>
                                         <td style="padding-left: 1em">
                                             <span class="badge bg-info text-dark">{{ $role->name }}</span>
@@ -79,7 +79,7 @@
                                 </tbody>
                             </table>
                         @else
-                            <p>No roles assigned to the user.</p>
+                            <p>No roles and permissions assigned to this user in this company.</p>
                         @endif
                     </div>
 

@@ -17,8 +17,11 @@ class CompanyController extends Controller
 
     public function data()
     {
+        $userId = Auth::user()->id;
         $companies_query = Company::select("*")
-            ->with(["admin"]);
+        ->whereHas('users', function ($query) use ($userId) {
+        $query->where('users.id', $userId);
+        })->get();
 
         return DataTables::of($companies_query)
             ->addColumn("logo", function ($row) {

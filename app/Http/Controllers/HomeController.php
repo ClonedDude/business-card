@@ -29,21 +29,22 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         if (empty(session("company_id"))) {
-            $company = Auth::user()->companies()->first();
-            $request->session()->put('company_id', $company->id);
+            if(Auth::user()->companies()->first()){
+                $company = Auth::user()->companies()->first();
+                $request->session()->put('company_id', $company->id);
 
-            setPermissionsTeamId($company->id);
+                setPermissionsTeamId($company->id);
+            }
         }
+        $roles = Auth::user()->roles;
         $user = Auth::user();
-        $companyUsers = CompanyUser::where('user_id', $user->id )->first();
-        $company = Company::where('id', $companyUsers->company_id)->get();
-        $role = $user->roles->first;
-        //init for admin role for user 1
-        if($user->id == 1) {
-            $user->assignRole('admin');
+        if(Auth::user()->companies()->first()){ 
+            $company = Auth::user()->companies;
         }
-        $permission = Permission::all();
+        else {
+            $company = '';
+        }
 
-        return view('home', compact('user', 'company', 'role', 'permission'));
+        return view('home', compact('user', 'company', 'roles'));
     }
 }

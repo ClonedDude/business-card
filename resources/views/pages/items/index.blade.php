@@ -62,7 +62,12 @@
                 url: '{{ route("items.data") }}',
                 data: function (d) {
                     // d.role = $('#role-filter').val();
-                }
+                },
+                error: function (xhr, error, thrown) {
+                // Show an error message
+                    alert('Error fetching data: ' + xhr.responseJSON?.message || 'Unknown error occurred.');
+                    console.error('Error details:', xhr.responseJSON || xhr.responseText);
+                },
             },
             columns: [
                 { data: 'placeholder', name: 'placeholder'}, //logo placeholder

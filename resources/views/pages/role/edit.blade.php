@@ -96,7 +96,26 @@
     document.addEventListener('DOMContentLoaded', function () {
     // Select all role checkboxes
     const roleCheckboxes = document.querySelectorAll('.role-checkbox');
+    const permissionCheckboxes = document.querySelectorAll('.permission-checkbox');
 
+    // Function to initialize the state of the "Select All" checkboxes
+    function initializeRoleCheckboxes() {
+        roleCheckboxes.forEach(roleCheckbox => {
+            const category = roleCheckbox.getAttribute('data-category');
+            const relatedCheckboxes = document.querySelectorAll(
+                `.permission-checkbox[data-category="${category}"]`
+            );
+            
+            // Check if all related checkboxes are already checked
+            const allChecked = [...relatedCheckboxes].every(cb => cb.checked);
+            roleCheckbox.checked = allChecked;
+        });
+    }
+
+    // Initialize the state on page load
+    initializeRoleCheckboxes();
+
+    // Add event listener to "Select All" checkboxes
     roleCheckboxes.forEach(roleCheckbox => {
         roleCheckbox.addEventListener('change', function () {
             const category = this.getAttribute('data-category');
@@ -110,8 +129,7 @@
         });
     });
 
-    // Optional: Update the role checkbox based on individual checkbox changes
-    const permissionCheckboxes = document.querySelectorAll('.permission-checkbox');
+    // Add event listener to individual permission checkboxes
     permissionCheckboxes.forEach(permissionCheckbox => {
         permissionCheckbox.addEventListener('change', function () {
             const category = this.getAttribute('data-category');
@@ -119,10 +137,11 @@
             const relatedCheckboxes = document.querySelectorAll(
                 `.permission-checkbox[data-category="${category}"]`
             );
-            
+
+            // Check if all related checkboxes are checked
             roleCheckbox.checked = [...relatedCheckboxes].every(cb => cb.checked);
         });
     });
-    });
+});
 </script>
 @endcan

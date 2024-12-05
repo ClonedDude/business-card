@@ -72,7 +72,12 @@
                 url: '{{ route("expenses.data") }}',
                 data: function (d) {
                     // d.role = $('#role-filter').val();
-                }
+                },
+                error: function (xhr, error, thrown) {
+                // Show an error message
+                    alert('Error fetching data: ' + xhr.responseJSON?.message || 'Unknown error occurred.');
+                    console.error('Error details:', xhr.responseJSON || xhr.responseText);
+                },
             },
             columns: [
                 { data: 'expense_id', name: 'expense_id'},

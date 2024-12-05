@@ -124,7 +124,6 @@
                 </div>
                 @endcan
 
-                @can('companies.view')
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -157,7 +156,6 @@
                         </a>
                     </div>
                 </div>
-                @endcan
 
                 @can('contacts.view')
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
@@ -194,7 +192,7 @@
                 </div>
                 @endcan
 
-                
+             @can('external.view')
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -227,6 +225,7 @@
                         </a>
                     </div>
                 </div>
+            @endcan
 
 
                 @can('expenses.view')
