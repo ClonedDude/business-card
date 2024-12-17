@@ -96,5 +96,39 @@
         $('#company-table').DataTable().draw();
     });
 </script>
+
+<script>
+    function equalizeDivSizes() {
+        const divs = document.querySelectorAll('.equalize div');
+        let maxWidth = 0, maxHeight = 0;
+
+        divs.forEach(div => {
+            const rect = div.getBoundingClientRect();
+            maxWidth = Math.max(maxWidth, rect.width);
+            maxHeight = Math.max(maxHeight, rect.height);
+        });
+
+        divs.forEach(div => {
+            div.style.width = `${maxWidth}px`;
+            div.style.height = `${maxHeight}px`;
+        });
+    }
+
+    // Call the function automatically when the script loads
+    equalizeDivSizes();
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        equalizeDivSizes();
+    });
+</script>
 @endpush
 @endcan
+
+@cannot('contacts.view')
+@section('content')
+    <div style="padding-left: 2em">
+        User does not have permission to view this
+    </div>
+@endsection
+@endcannot

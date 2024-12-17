@@ -145,3 +145,11 @@
 });
 </script>
 @endcan
+
+@cannot('roles.update')
+@section('content')
+<div style="padding-left: 2em">
+    User does not have permission to view this
+</div>
+@endsection
+@endcan

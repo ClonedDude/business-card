@@ -56,7 +56,7 @@
                 </div>
                 <div class="card-footer">
                     <button class="btn btn-primary">
-                        Submit
+                        Save
                     </button>
                 </div>
             </form>
@@ -66,3 +66,11 @@
 </div> 
 @endsection
 @endcan
+
+@cannot('items.update')
+@section('content')
+    <div style="padding-left: 2em">
+        User does not have permission to view this
+    </div>
+@endsection
+@endcannot

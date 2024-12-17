@@ -110,3 +110,11 @@
     </script>
 @endpush
 @endcan
+
+@cannot('contacts.view')
+@section('content')
+    <div style="padding-left: 2em">
+        User does not have permission to view this
+    </div>
+@endsection
+@endcannot

@@ -17,12 +17,12 @@
         </div>
         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
             @if (auth()->user()->companies()->count() > 1)
-                <form action="{{ route('switch-company') }}" method="POST" class="form-group d-flex flex-row">
+                <form action="{{ route('switch-company') }}" method="POST" class="form-group d-flex flex-row" id="switchCompanyForm">
                     @csrf
                     <select class="form-select form-select-lg me-2" name="company_id" id="company_id">
                         @foreach (auth()->user()->companies()->get() as $company)
-                            <option value="{{ $company->id }}" @if (session("company_id") == $company->id) selected @endif>
-                                {{ $company->name }}
+                            <option value="{{ $company->id }}" @if (session("company_id") == $company->id) style="background-color: #009EF7; color:white" selected @endif>
+                                {{ $company->name }} 
                             </option>
                         @endforeach
                     </select>
@@ -43,6 +43,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('switchCompanyForm').addEventListener('submit', function(event) {
+        const selectedCompanyId = document.getElementById('company_id').value;
+        const currentCompanyId = "{{ session('company_id') }}";
+
+        if (selectedCompanyId === currentCompanyId) {
+            // Prevent form submission if the selected company is the same
+            event.preventDefault();
+            alert('Company already in session');
+        }
+    });
+</script>
 
 @push('head')
 @endpush

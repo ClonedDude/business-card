@@ -95,3 +95,11 @@
 </script>
 @endpush
 @endcan
+
+@cannot('users.view')
+@section('content')
+    <div style="padding-left: 2em">
+        User does not have permission to view this
+    </div>
+@endsection
+@endcannot

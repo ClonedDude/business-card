@@ -18,7 +18,7 @@ class SessionController extends Controller
                 ->with("error", "Access Forbidden");
 
         $request->session()->put('company_id', $company->id);
-
-        return redirect(route("home"));
+        // Redirect back to the previous URL or the current page
+        return redirect()->back();
     }
 }

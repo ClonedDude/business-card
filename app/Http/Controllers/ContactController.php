@@ -34,32 +34,28 @@ class ContactController extends Controller
             })
             ->addColumn("action", function ($row) {
                 $detail_button
-                    = '<a href="'.route('contacts.show', $row->id).'" class="btn btn-sm btn-primary me-2 mb-4">
-                        <i class="fas fa-eye"></i>
+                    = '<div> <a href="'.route('contacts.show', $row->id).'" class="btn btn-sm btn-primary me-2 mb-4">
                         Detail
-                    </a>';
+                    </a></div>';
 
                 $public_detail_button
-                    = '<a href="'.route('public-contact-detail', ["contact_code" => $row->contact_code]).'" class="btn btn-sm btn-primary me-2 mb-4">
-                        <i class="fas fa-eye"></i>
+                    = '<div> <a href="'.route('public-contact-detail', ["contact_code" => $row->contact_code]).'" class="btn btn-sm btn-primary me-2 mb-4">
                         Public Detail
-                    </a>';
+                    </a> </div>';
 
                 $edit_button
-                    = '<a href="'.route('contacts.edit', $row->id).'" class="btn btn-sm btn-info me-2 mb-4">
-                        <i class="fas fa-edit"></i>
+                    = '<div><a href="'.route('contacts.edit', $row->id).'" class="btn btn-sm btn-info me-2 mb-4">
                         Edit
-                    </a>';
+                    </a> </div>';
 
                 $delete_button
                     = '<form class="delete-training-form" action="'.route('contacts.delete', $row->id).'" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this contact? This action cannot be undone.\')">
                         '.csrf_field().'
-                        <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
-                        <i class="fas fa-trash"></i>
-                        Delete</button>
+                        <div><button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
+                        Delete</button></div>
                     </form>';
 
-                $html = "<div class='d-flex flex-row'>
+                $html = "<div class='d-flex flex-row equalize'>
                     $detail_button
                     $public_detail_button
                     $edit_button
@@ -75,7 +71,6 @@ class ContactController extends Controller
     public function show($id)
     {
         $contact = Contact::findOrFail($id);
-
         return view("pages.contact.show", compact("contact"));
     }
 

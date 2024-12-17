@@ -56,7 +56,12 @@
                 url: '{{ route("roles.data") }}',
                 data: function (d) {
                     // d.role = $('#role-filter').val();
-                }
+                },
+                error: function (xhr, error, thrown) {
+                // Show an error message
+                    alert('Error fetching data: ' + xhr.responseJSON?.message || 'Unknown error occurred.');
+                    console.error('Error details:', xhr.responseJSON || xhr.responseText);
+                },
             },
             columns: [
                 { data: 'name', name: 'name' },
@@ -85,3 +90,11 @@
 </script>
 @endpush
 @endcan
+
+@cannot('roles.view')
+@section('content')
+    <div style="padding-left: 2em">
+        User does not have permission to view this
+    </div>
+@endsection
+@endcannot

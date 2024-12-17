@@ -23,9 +23,10 @@ class RoleController extends Controller
 
     public function data()
     {
+        $companyId = session('company_id');
         $roles_query = Role::select("*")
-            ->where("company_id", getPermissionsTeamId());
-
+            ->where("company_id", $companyId);
+        
             return DataTables::of($roles_query)
             ->addColumn("action", function ($row) {
                 $edit_button = '';

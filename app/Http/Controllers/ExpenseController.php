@@ -105,7 +105,7 @@ class ExpenseController extends Controller
                 //Approved
                 if ($row->approval == 1) {
                     $approve_button 
-                    = '<button type="button" id="approved-btn" class="btn btn-sm me-2 mb-4 disabled btn-success disabled style="color:grey">
+                    = '<button type="button" id="approved-btn" class="btn btn-sm me-2 mb-4 disabled btn-success" disabled style="color:grey">
                     Approved
                     </button>';
                 }
@@ -137,7 +137,7 @@ class ExpenseController extends Controller
                     </form>';
                 }
                 }
-                $html = "<div class='d-flex flex-row'>
+                $html = "<div class='d-flex flex-row equalize'>
                     $detail_button
                     $edit_button
                     $delete_button

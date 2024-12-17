@@ -84,10 +84,6 @@
   background-color: #f1f1f1;
 }
 
-#company-table th {
-  text-align: center;
-  vertical-align: top !important;
-}
 
 #company-table th:last-child {
   text-align: center;
