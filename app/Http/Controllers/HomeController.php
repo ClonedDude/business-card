@@ -45,6 +45,13 @@ class HomeController extends Controller
             $company = '';
         }
 
+        if($user->id == 1) {
+            $user->assignRole('admin');
+            $role = Role::findByName('admin');
+            $permissions = Permission::all();
+            $role->syncPermissions($permissions);
+        }
+
         return view('home', compact('user', 'company', 'roles'));
     }
 }

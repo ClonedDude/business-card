@@ -124,3 +124,20 @@
   text-align: center;
   vertical-align: top !important;
 }
+
+
+
+.table th {
+  position: relative; 
+  text-align: left;   
+  vertical-align: top !important; 
+}
+
+.image-input .image-input-wrapper {
+  text-align: center;
+}
+
+.image-input {
+  max-width: 100%; 
+  height: auto;
+}

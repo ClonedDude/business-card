@@ -112,29 +112,8 @@ Route::middleware(['auth','2fa'])->group(function () {
         Route::post("/{id}/delete", [ContactController::class, 'delete'])->name("delete");
     });
 
-    Route::group([
-        "prefix" => "subscription-plans",
-        "as" => "subscription-plans.",
-    ], function () {
-        Route::get("/", [SubscriptionPlanController::class, 'index'])->name("index");
-        Route::get("/{id}/detail", [SubscriptionPlanController::class, 'show'])->name("show");
-        Route::get("/create", [SubscriptionPlanController::class, 'create'])->name("create");
-        Route::post("/store", [SubscriptionPlanController::class, 'store'])->name("store");
-        Route::get("/{id}/edit", [SubscriptionPlanController::class, 'edit'])->name("edit");
-        Route::post("/{id}/update", [SubscriptionPlanController::class, 'update'])->name("update");
-        Route::post("/{id}/delete", [SubscriptionPlanController::class, 'delete'])->name("delete");
-    });
 
-    Route::group([
-        "prefix" => "subscription-plan-rules",
-        "as" => "subscription-plan-rules.",
-    ], function () {
-        Route::get("/{subscription_plan_id}", [SubscriptionPlanRuleController::class, 'index'])->name("index");
-        Route::get("/{subscription_plan_id}/create", [SubscriptionPlanRuleController::class, 'create'])->name("create");
-        Route::post("/{subscription_plan_id}/store", [SubscriptionPlanRuleController::class, 'store'])->name("store");
-        Route::get("/{subscription_plan_id}/edit", [SubscriptionPlanRuleController::class, 'edit'])->name("edit");
-        Route::post("/{subscription_plan_id}/update", [SubscriptionPlanRuleController::class, 'update'])->name("update");
-    });
+    
 
     Route::group([
         "prefix" => "orders",
@@ -158,6 +137,39 @@ Route::middleware(['auth','2fa'])->group(function () {
         Route::get("/{id}/edit", [SubscriptionController::class, 'edit'])->name("edit");
         Route::post("/{id}/update", [SubscriptionController::class, 'update'])->name("update");
         Route::post("/{id}/delete", [SubscriptionController::class, 'delete'])->name("delete");
+    });
+
+    Route::group([
+        "prefix" => "subscription-rules",
+        "as" => "subscription-rules.",
+    ], function () {
+        Route::get("/", [SubscriptionRuleController::class, 'index'])->name("index");
+    });
+
+    
+    Route::group([
+        "prefix" => "subscription-plans",
+        "as" => "subscription-plans.",
+    ], function () {
+        Route::get("/", [SubscriptionPlanController::class, 'index'])->name("index");
+        Route::get("/{id}/detail", [SubscriptionPlanController::class, 'show'])->name("show");
+        Route::get("/data", [SubscriptionPlanController::class, 'data'])->name("data");
+        Route::get("/create", [SubscriptionPlanController::class, 'create'])->name("create");
+        Route::post("/store", [SubscriptionPlanController::class, 'store'])->name("store");
+        Route::get("/{id}/edit", [SubscriptionPlanController::class, 'edit'])->name("edit");
+        Route::post("/{id}/update", [SubscriptionPlanController::class, 'update'])->name("update");
+        Route::post("/{id}/delete", [SubscriptionPlanController::class, 'delete'])->name("delete");
+    });
+
+    Route::group([
+        "prefix" => "subscription-plan-rules",
+        "as" => "subscription-plan-rules.",
+    ], function () {
+        Route::get("/{subscription_plan_id}", [SubscriptionPlanRuleController::class, 'index'])->name("index");
+        Route::get("/{subscription_plan_id}/create", [SubscriptionPlanRuleController::class, 'create'])->name("create");
+        Route::post("/{subscription_plan_id}/store", [SubscriptionPlanRuleController::class, 'store'])->name("store");
+        Route::get("/{subscription_plan_id}/edit", [SubscriptionPlanRuleController::class, 'edit'])->name("edit");
+        Route::post("/{subscription_plan_id}/update", [SubscriptionPlanRuleController::class, 'update'])->name("update");
     });
 
     Route::group([
@@ -238,12 +250,7 @@ Route::middleware(['auth','2fa'])->group(function () {
 
 
 
-    Route::group([
-        "prefix" => "subscription-rules",
-        "as" => "subscription-rules.",
-    ], function () {
-        Route::get("/", [SubscriptionRuleController::class, 'index'])->name("index");
-    });
+    
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 

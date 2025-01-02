@@ -53,6 +53,11 @@ class RolePermissionSeeder extends Seeder
             'external.view',
             'external.store',
             'external.update',
+
+            'subscription-plans.delete',
+            'subscription-plans.view',
+            'subscription-plans.store',
+            'subscription-plans.update',
         );
     }
 }
