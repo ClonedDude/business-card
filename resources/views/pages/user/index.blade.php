@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@can('users.view')
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
@@ -9,11 +10,13 @@
                     <div class="card-title">
                         {{ __('User List') }}
                     </div>
+                    @can('users.store')
                     <div class="card-toolbar">
                         <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary">
                             Create
                         </a>
                     </div>
+                    @endcan
                 </div>
 
                 <div class="card-body">
@@ -24,6 +27,7 @@
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Companies</th>
+                                    <th>Role</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -54,13 +58,19 @@
                 url: '{{ route("users.data") }}',
                 data: function (d) {
                     // d.role = $('#role-filter').val();
-                }
+                },
+                error: function (xhr, error, thrown) {
+                // Show an error message
+                    alert('Error fetching data: ' + xhr.responseJSON?.message || 'Unknown error occurred.');
+                    console.error('Error details:', xhr.responseJSON || xhr.responseText);
+                },
             },
             columns: [
                 { data: 'name', name: 'name' },
                 { data: 'email', name: 'email' },
-                { data: 'companies', name: 'companies'},
-                { data: 'action', name: 'action'}
+                { data: 'companies', name: 'companies', orderable: false, searchable: false },
+                { data: 'roles', name: 'roles', orderable: false, searchable: false },
+                { data: 'action', name: 'action', orderable: false, searchable: false }
             ],
             dom:
             "<'row'" +
@@ -84,3 +94,12 @@
     });
 </script>
 @endpush
+@endcan
+
+@cannot('users.view')
+@section('content')
+    <div style="padding-left: 2em">
+        User does not have permission to view this
+    </div>
+@endsection
+@endcannot

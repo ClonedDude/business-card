@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use Spatie\Permission\Models\Role;
 use Intervention\Image\ImageManagerStatic;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -28,14 +29,21 @@ class Company extends Model implements HasMedia
         "website",
     ];
     
-    public function admin()
-    {
-        return $this->belongsTo(User::class, "admin_id");
-    }
 
     public function users()
     {
-        return $this->belongsToMany(User::class, "company_users");
+        return $this->belongsToMany(User::class, 'company_users', 'company_id', 'user_id');
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
+    }
+
+
+    public function roles()
+    {
+        return $this->hasMany(Role::class, 'company_id', 'id');
     }
 
     public function logoUrl() : Attribute

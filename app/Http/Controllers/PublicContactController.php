@@ -10,10 +10,8 @@ class PublicContactController extends Controller
 {
     public function show($contact_code)
     {
-        $contact = Contact::where("contact_code", $contact_code)
-            ->first();
-
-        return view("pages.public.contact.show", compact("contact"));
+        $contact = Contact::where("contact_code", $contact_code)->first();
+        return view("pages.public.contact.show", compact("contact", "contact_code"));
     }
 
     public function download($contact_code)

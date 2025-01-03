@@ -64,3 +64,80 @@
 .remove-btn:hover {
   background-color: #c82333;
 }
+
+.search-results-container {
+  position: absolute;
+  z-index: 1000;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.search-results-container div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.search-results-container div:hover {
+  background-color: #f1f1f1;
+}
+
+
+#company-table th:last-child {
+  text-align: center;
+  vertical-align: top !important;
+}
+
+#company-table td:last-child div {
+  text-align: center;
+  justify-content: center;
+  align-items: center; 
+}
+
+#role-table td:last-child div {
+  text-align: center;
+  justify-content: center;
+  align-items: center; 
+}
+
+#role-table th:last-child{
+  text-align: center;
+  vertical-align: top !important;
+}
+
+#user-table td:last-child div {
+  text-align: center;
+  justify-content: center;
+  align-items: center; 
+}
+
+#user-table th:last-child{
+  text-align: center;
+  vertical-align: top !important;
+}
+
+
+
+#table-responsive th {
+  text-align: center;
+  vertical-align: top !important;
+}
+
+
+
+.table th {
+  position: relative; 
+  text-align: left;   
+  vertical-align: top !important; 
+}
+
+.image-input .image-input-wrapper {
+  text-align: center;
+}
+
+.image-input {
+  max-width: 100%; 
+  height: auto;
+}

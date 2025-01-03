@@ -17,8 +17,11 @@ class CompanyController extends Controller
 
     public function data()
     {
+        $userId = Auth::user()->id;
         $companies_query = Company::select("*")
-            ->with(["admin"]);
+        ->whereHas('users', function ($query) use ($userId) {
+        $query->where('users.id', $userId);
+        })->get();
 
         return DataTables::of($companies_query)
             ->addColumn("logo", function ($row) {
@@ -30,25 +33,35 @@ class CompanyController extends Controller
                 return $row->admin->name;
             })
             ->addColumn("action", function ($row) {
+                $detail_button = '';
+                $edit_button = '';
+                $delete_button = '';
+                
+                if (Auth::user()->can('companies.view')) {
                 $detail_button
                     = '<a href="'.route('companies.show', $row->id).'" class="btn btn-sm btn-primary me-2 mb-4">
                         <i class="fas fa-eye"></i>
                         Detail
                     </a>';
+                }
 
+                if (Auth::user()->can('companies.update')) {
                 $edit_button
                     = '<a href="'.route('companies.edit', $row->id).'" class="btn btn-sm btn-info me-2 mb-4">
                         <i class="fas fa-edit"></i>
                         Edit
                     </a>';
+                }
 
+                if (Auth::user()->can('companies.delete')) {
                 $delete_button
-                    = '<form class="delete-training-form" action="'.route('companies.delete', $row->id).'" method="POST">
+                    = '<form class="delete-training-form" action="'.route('companies.delete', $row->id).'" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this company? This action cannot be undone.\')">
                         '.csrf_field().'
                         <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
                         <i class="fas fa-trash"></i>
                         Delete</button>
                     </form>';
+                }
 
                 $html = "<div class='d-flex flex-row'>
                     $detail_button
@@ -96,7 +109,7 @@ class CompanyController extends Controller
 
     public function update(Request $request, CompanyService $companyService, int $id)
     {
-        $company = $companyService->updateCompany($id, $request->all());
+        $companyService->updateCompany($id, $request->all());
 
         return redirect(route("companies.index"))
             ->with("success", "company updated successfully");

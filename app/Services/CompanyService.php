@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Validator;
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Validation\Rule;
 
 class CompanyService {
@@ -23,6 +24,9 @@ class CompanyService {
         ])->validate();
 
         $company = Company::create($validated);
+        $user = User::find($validated['admin_id']);
+        $user->companies()->attach($company);
+        $user->assignRole('admin');
 
         $company->uploadLogo($validated["logo"] ?? null);
         $company->uploadCompanyPicture($validated["picture"] ?? null);

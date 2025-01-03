@@ -14,7 +14,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class ExpenseItem extends Model
 {
-    protected $fillable = ['name', 'price', 'quantity', 'currency', 'company_id'];
+    protected $fillable = ['name', 'price', 'quantity', 'description', 'currency', 'company_id'];
 
     // Define the inverse relationship (expense -> items)
     public function expense()

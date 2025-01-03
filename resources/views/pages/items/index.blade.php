@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@can('items.view')
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
@@ -9,11 +10,13 @@
                     <div class="card-title">
                         Item List
                     </div>
-                    <div class="card-toolbar">
+                    @can('items.store')
+                        <div class="card-toolbar">
                         <a href="{{ route('items.create') }}" class="btn btn-sm btn-primary">
                             Create
                         </a>
-                    </div>
+                        </div>
+                    @endcan
                 </div>
 
                 <div class="card-body">
@@ -22,10 +25,10 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>Item ID</th>
-                                    <th>Item Name</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
                                     <th>Description</th>
-                                    <th>Company ID</th>
+                                    <th>Company-ID</th>
                                     <th>Price</th>
                                     <th>Currency</th>
                                     <th>Created at</th>
@@ -59,7 +62,12 @@
                 url: '{{ route("items.data") }}',
                 data: function (d) {
                     // d.role = $('#role-filter').val();
-                }
+                },
+                error: function (xhr, error, thrown) {
+                // Show an error message
+                    alert('Error fetching data: ' + xhr.responseJSON?.message || 'Unknown error occurred.');
+                    console.error('Error details:', xhr.responseJSON || xhr.responseText);
+                },
             },
             columns: [
                 { data: 'placeholder', name: 'placeholder'}, //logo placeholder
@@ -94,3 +102,12 @@
     });
 </script>
 @endpush
+@endcan
+
+@cannot('items.view')
+@section('content')
+    <div style="padding-left: 2em">
+        User does not have permission to view this
+    </div>
+@endsection
+@endcannot

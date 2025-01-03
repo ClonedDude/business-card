@@ -14,11 +14,13 @@ class ExpenseItemService {
             "company_id" => ["required", "integer"],
             "description" => ["nullable","string"],
             "price" => ["required", "numeric"],
-            "currency" => ["required", "string"]
+            "currency" => ["required", "string"],
         ])->validate();
+        
+        $validated['created_at'] = now(); //Create timestamp of item creation
+        $validated['updated_at'] = now();
 
-        $item = ExpenseItem::create($validated);
-        return $item;
+        ExpenseItem::create($validated);
     }
 
     public function updateItem(int $id, array $data)
@@ -32,6 +34,9 @@ class ExpenseItemService {
             "price" => ["required", "numeric"],
             "currency" => ["required", "string"],
         ])->validate();
+
+        $validated['updated_at'] = now(); //update item timestamp
+
 
         if (isset($validated['description']) && $validated['description'] !== $item->description) {
             $item->description = $validated['description'];

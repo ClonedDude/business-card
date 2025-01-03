@@ -1,5 +1,7 @@
 @php
-    $role = "admin";
+    use Illuminate\Support\Facades\Auth;
+
+    $user = Auth::user();
 @endphp
 
 <!--begin::Aside-->
@@ -30,7 +32,7 @@
         <!--begin::Aside Menu-->
         <div class="hover-scroll-overlay-y my-5 my-lg-5" id="kt_aside_menu_wrapper" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-wrappers="#kt_aside_menu" data-kt-scroll-offset="0">
             <!--begin::Menu-->
-            <div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500" id="#kt_aside_menu" data-kt-menu="true">
+            <div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500" id="#kt_aside_menu" data-kt-menu="true" style="flex-direction: column; height:100%;">
                 <div class="menu-item">
                     <div class="menu-content pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">Dashboard</span>
@@ -52,6 +54,7 @@
                     </a>
                 </div>
 
+                @can('users.view')
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -84,7 +87,9 @@
                         </a>
                     </div>
                 </div>
+                @endcan
 
+                @can('roles.view')
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -94,6 +99,47 @@
                                     <path opacity="0.3" d="M16.5 9C16.5 13.125 13.125 16.5 9 16.5C4.875 16.5 1.5 13.125 1.5 9C1.5 4.875 4.875 1.5 9 1.5C13.125 1.5 16.5 4.875 16.5 9Z" fill="currentColor"/>
                                     <path d="M9 16.5C10.95 16.5 12.75 15.75 14.025 14.55C13.425 12.675 11.4 11.25 9 11.25C6.6 11.25 4.57499 12.675 3.97499 14.55C5.24999 15.75 7.05 16.5 9 16.5Z" fill="currentColor"/>
                                     <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor"/>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title">Role</span>
+                        <span class="menu-arrow"></span>
+                    </span>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <a class="menu-link" href="{{ route("roles.index") }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">List Role</span>
+                        </a>
+
+                        <a class="menu-link" href="{{ route("roles.create") }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Add Role</span>
+                        </a>
+                    </div>
+                </div>
+                @endcan
+
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                    <span class="menu-link">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | Company Icon-->
+                            <span class="svg-icon svg-icon-2">
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Background Circle -->
+                                    <path opacity="0.3" d="M16.5 9C16.5 13.125 13.125 16.5 9 16.5C4.875 16.5 1.5 13.125 1.5 9C1.5 4.875 4.875 1.5 9 1.5C13.125 1.5 16.5 4.875 16.5 9Z" fill="currentColor" />
+                                    <!-- Building Base -->
+                                    <rect x="5" y="5" width="8" height="10" rx="1" fill="currentColor" />
+                                    <!-- Building Windows -->
+                                    <rect x="6.5" y="6.5" width="1.5" height="1.5" rx="0.2" fill="white" />
+                                    <rect x="10" y="6.5" width="1.5" height="1.5" rx="0.2" fill="white" />
+                                    <rect x="6.5" y="9" width="1.5" height="1.5" rx="0.2" fill="white" />
+                                    <rect x="10" y="9" width="1.5" height="1.5" rx="0.2" fill="white" />
+                                    <rect x="6.5" y="11.5" width="5" height="1.5" rx="0.2" fill="white" />
                                 </svg>
                             </span>
                             <!--end::Svg Icon-->
@@ -118,19 +164,29 @@
                     </div>
                 </div>
 
+                @can('contacts.view')
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
+                            <!--begin::Svg Icon | Multi-User Icon-->
                             <span class="svg-icon svg-icon-2">
                                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path opacity="0.3" d="M16.5 9C16.5 13.125 13.125 16.5 9 16.5C4.875 16.5 1.5 13.125 1.5 9C1.5 4.875 4.875 1.5 9 1.5C13.125 1.5 16.5 4.875 16.5 9Z" fill="currentColor"/>
-                                    <path d="M9 16.5C10.95 16.5 12.75 15.75 14.025 14.55C13.425 12.675 11.4 11.25 9 11.25C6.6 11.25 4.57499 12.675 3.97499 14.55C5.24999 15.75 7.05 16.5 9 16.5Z" fill="currentColor"/>
-                                    <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor"/>
+                                    <!-- Outer Circle Background -->
+                                    <path opacity="0.3" d="M16.5 9C16.5 13.125 13.125 16.5 9 16.5C4.875 16.5 1.5 13.125 1.5 9C1.5 4.875 4.875 1.5 9 1.5C13.125 1.5 16.5 4.875 16.5 9Z" fill="currentColor" />
+                                    <!-- Primary User (Center) -->
+                                    <path d="M9 16.5C10.95 16.5 12.75 15.75 14.025 14.55C13.425 12.675 11.4 11.25 9 11.25C6.6 11.25 4.57499 12.675 3.97499 14.55C5.24999 15.75 7.05 16.5 9 16.5Z" fill="currentColor" />
+                                    <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor" />
+                                    <!-- Secondary User (Left) -->
+                                    <path d="M4.5 14C5.325 14.875 6.6 15.375 7.8 15.375C7.425 14.4 6.225 13.65 4.875 13.5C3.6 13.35 2.925 13.8 2.775 14.025C3.375 14.5 3.975 14.75 4.5 14Z" fill="currentColor" />
+                                    <circle cx="5.5" cy="7.5" r="1.5" fill="currentColor" />
+                                    <!-- Secondary User (Right) -->
+                                    <path d="M13.5 14C12.675 14.875 11.4 15.375 10.2 15.375C10.575 14.4 11.775 13.65 13.125 13.5C14.4 13.35 15.075 13.8 15.225 14.025C14.625 14.5 14.025 14.75 13.5 14Z" fill="currentColor" />
+                                    <circle cx="12.5" cy="7.5" r="1.5" fill="currentColor" />
                                 </svg>
                             </span>
                             <!--end::Svg Icon-->
                         </span>
+                        
                         <span class="menu-title">Contact</span>
                         <span class="menu-arrow"></span>
                     </span>
@@ -150,7 +206,9 @@
                         </a>
                     </div>
                 </div>
+                @endcan
 
+             @can('external.view')
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -183,17 +241,53 @@
                         </a>
                     </div>
                 </div>
+            @endcan
 
+            <!-- Subscription plans  -->
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <span class="menu-link">
+                    <span class="menu-icon">
+                        <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
+                        <span class="svg-icon svg-icon-2">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.3" d="M16.5 9C16.5 13.125 13.125 16.5 9 16.5C4.875 16.5 1.5 13.125 1.5 9C1.5 4.875 4.875 1.5 9 1.5C13.125 1.5 16.5 4.875 16.5 9Z" fill="currentColor"/>
+                                <path d="M9 16.5C10.95 16.5 12.75 15.75 14.025 14.55C13.425 12.675 11.4 11.25 9 11.25C6.6 11.25 4.57499 12.675 3.97499 14.55C5.24999 15.75 7.05 16.5 9 16.5Z" fill="currentColor"/>
+                                <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span class="menu-title">Subscriptions</span>
+                    <span class="menu-arrow"></span>
+                </span>
+                <div class="menu-sub menu-sub-accordion menu-active-bg">
+                    <a class="menu-link" href="{{ route("subscription-plans.index") }}">
+                        <span class="menu-bullet">
+                            <span class="bullet bullet-dot"></span>
+                        </span>
+                        <span class="menu-title">View subscription plans</span>
+                    </a>
+
+                    <a class="menu-link" href="{{ route("subscription-plans.create") }}">
+                        <span class="menu-bullet">
+                            <span class="bullet bullet-dot"></span>
+                        </span>
+                        <span class="menu-title">Add subscription plan</span>
+                    </a>
+                </div>
+            </div>
+
+
+                @can('expenses.view')
                 {{-- Expense management sidebar --}}
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
+                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                             <span class="svg-icon svg-icon-2">
-                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path opacity="0.3" d="M16.5 9C16.5 13.125 13.125 16.5 9 16.5C4.875 16.5 1.5 13.125 1.5 9C1.5 4.875 4.875 1.5 9 1.5C13.125 1.5 16.5 4.875 16.5 9Z" fill="currentColor"/>
-                                    <path d="M9 16.5C10.95 16.5 12.75 15.75 14.025 14.55C13.425 12.675 11.4 11.25 9 11.25C6.6 11.25 4.57499 12.675 3.97499 14.55C5.24999 15.75 7.05 16.5 9 16.5Z" fill="currentColor"/>
-                                    <rect x="7" y="6" width="4" height="4" rx="2" fill="currentColor"/>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor" />
+                                    <path d="M12 7C10.3431 7 9 8.34315 9 10C9 11.1046 9.89543 12 11 12H13C14.1046 12 15 12.8954 15 14C15 15.6569 13.6569 17 12 17M12 7V17M12 7C13.6569 7 15 8.34315 15 10M12 17C10.3431 17 9 15.6569 9 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </span>
                             <!--end::Svg Icon-->
@@ -201,6 +295,8 @@
                         <span class="menu-title">Expense management</span>
                         <span class="menu-arrow"></span>
                     </span>
+
+                    @can('expenses.view')
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <a class="menu-link" href="{{ route("expenses.index") }}">
                             <span class="menu-bullet">
@@ -208,14 +304,18 @@
                             </span>
                             <span class="menu-title">View Expense</span>
                         </a>
+                    @endcan
 
+                    @can('expenses.store')
                         <a class="menu-link" href="{{ route("expenses.create") }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
                             <span class="menu-title">Create Expense</span>
                         </a>
+                    @endcan
 
+                    @can('items.view')
                         <a class="menu-link" href="{{ route("items.index") }}">
                         
                                <span class="menu-bullet">
@@ -223,20 +323,23 @@
                             </span>
                             <span class="menu-title">View Items</span>
                         </a>
+                    @endcan
 
+                    @can('items.store')
                         <a class="menu-link" href="{{ route("items.create") }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
                             <span class="menu-title">Create Items</span>
                         </a>
+                    @endcan
                     </div>
                 </div>
+                @endcan
                 {{-- End of expense management --}}
 
-
                 
-                <div class="menu-item">
+                <div class="menu-item" style="margin-top: auto">
                     <form class="menu-link" action="{{ route("logout") }}" method="POST">
                         @csrf
                         <span class="menu-icon">

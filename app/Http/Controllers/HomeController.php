@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\CompanyUser;
+use App\Models\Company;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class HomeController extends Controller
 {
@@ -21,10 +26,32 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-        // dd("here");
+        if (empty(session("company_id"))) {
+            if(Auth::user()->companies()->first()){
+                $company = Auth::user()->companies()->first();
+                $request->session()->put('company_id', $company->id);
 
-        return view('home');
+                setPermissionsTeamId($company->id);
+            }
+        }
+        $roles = Auth::user()->roles;
+        $user = Auth::user();
+        if(Auth::user()->companies()->first()){ 
+            $company = Auth::user()->companies;
+        }
+        else {
+            $company = '';
+        }
+
+        if($user->id == 1) {
+            $user->assignRole('admin');
+            $role = Role::findByName('admin');
+            $permissions = Permission::all();
+            $role->syncPermissions($permissions);
+        }
+
+        return view('home', compact('user', 'company', 'roles'));
     }
 }

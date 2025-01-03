@@ -1,7 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head><base href="">
-		<title>Business Card</title>
+		@auth
+			@php
+				$company = auth()->user()->companies()->find(
+					session("company_id")
+				);
+			@endphp
+			@if ($company)
+				<title>{{ $company->name }}</title>
+			@else
+				<title>Business Card</title>
+			@endif
+		@else			
+			<title>Business Card</title>
+		@endauth
 		<meta charset="utf-8" />
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<link rel="shortcut icon" href="{{ asset("assets/admin/images/logo.png") }}" type="image/x-icon">
@@ -14,6 +27,7 @@
 		@vite(['resources/sass/app.scss'])
 		<link href="{{ asset('assets/admin/css/style.bundle.css') }}" rel="stylesheet" />
 		<link href="{{ asset('assets/admin/css/app.css') }}" rel="stylesheet" />
+		<link href="{{ asset('vendor/fontawesome/css/all.min.css') }}" rel="stylesheet" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
 		@livewireStyles
@@ -48,6 +62,7 @@
 
 		<script src="{{ asset("assets/admin/js/scripts.bundle.js") }}"></script>
 		<script src="{{ asset("assets/admin/plugins/global/plugins.bundle.js")}}"></script>
+		<script src="{{ asset("vendor/fontawesome/js/all.min.js") }}"></script>
 
 		<script>
 			const myDefaultAllowList = bootstrap.Tooltip.Default.allowList;

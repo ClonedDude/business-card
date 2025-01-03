@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ExpenseItem;
 use App\Models\Company;
+use App\Models\CompanyUser;
 use App\Services\ExpenseItemService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,8 @@ class ExpenseItemController extends Controller
 
     public function data()
     {
-        $expense_item_query = DB::table('expense_items');
+        $companyId = session(('company_id'));
+        $expense_item_query = ExpenseItem::where('company_id', $companyId);
         
         return DataTables::of($expense_item_query)
             ->addColumn("placeholder", function ($row) {
@@ -54,26 +56,32 @@ class ExpenseItemController extends Controller
                 return $row->company_id;
             })
             ->addColumn("action", function ($row) {
+                $detail_button = '';
+                $edit_button = '';
+                $delete_button = '';
+
+                if (Auth::user()->can('items.view')) {
                 $detail_button
                     = '<a href="'.route('items.show', $row->id).'" class="btn btn-sm btn-primary me-2 mb-4">
-                        <i class="fas fa-eye"></i>
                         Detail
                     </a>';
+                }
 
+                if (Auth::user()->can('items.update')) {
                 $edit_button
                     = '<a href="'.route('items.edit', $row->id).'" class="btn btn-sm btn-info me-2 mb-4">
-                        <i class="fas fa-edit"></i>
                         Edit
                     </a>';
+                }
 
+                if (Auth::user()->can('items.delete')) {
                 $delete_button
-                    = '<form class="delete-training-form" action="'.route('items.delete', $row->id).'" method="POST">
+                    = '<form class="delete-training-form" action="'.route('items.delete', $row->id).'" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this item? This action cannot be undone.\')">
                         '.csrf_field().'
                         <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
-                        <i class="fas fa-trash"></i>
                         Delete</button>
                     </form>';
-
+                }
                 $html = "<div class='d-flex flex-row'>
                     $detail_button
                     $edit_button
@@ -88,7 +96,7 @@ class ExpenseItemController extends Controller
 
     public function store(Request $request, ExpenseItemService $expenseItemService)
     {
-        $items = $expenseItemService->createItem($request->all());
+        $expenseItemService->createItem($request->all());
 
         return redirect(route("items.index"))
             ->with("success", "user created successfully");

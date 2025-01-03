@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@can('external.view')
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
@@ -9,18 +10,29 @@
                     <div class="card-title">
                         {{ __('External Link Type List') }}
                     </div>
+                    @can('external.store')
                     <div class="card-toolbar">
                         <a href="{{ route('external-link-types.create') }}" class="btn btn-sm btn-primary">
                             Create
                         </a>
                     </div>
+                    @endcan
                 </div>
 
                 <div class="card-body">
-                    @livewire('external-link-type-table')
+                    @livewire("external-link-type-table")
                 </div>
             </div>
         </div>
     </div>
 </div> 
 @endsection
+@endcan
+
+@cannot('external.view')
+@section('content')
+    <div style="padding-left: 2em">
+        User does not have permission to view this
+    </div>
+@endsection
+@endcannot

@@ -16,6 +16,7 @@ class Contact extends Model implements HasMedia
     use HasFactory,
         ModelUtilities,
         InteractsWithMedia;
+        
 
     protected $fillable = [
         "user_id",

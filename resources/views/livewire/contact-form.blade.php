@@ -62,7 +62,7 @@
             type="text"
             name="name"
             id="name-input"
-            @if (!$is_detail_inputs_allowed)
+            @if ($contact)
                 disabled
             @endif
             value="{{ old('name', $name) }}">
@@ -81,7 +81,7 @@
             type="text"
             name="subtitle"
             id="subtitle-input"
-            @if (!$is_detail_inputs_allowed)
+            @if ($contact)
                 disabled
             @endif
             value="{{ old('subtitle', $subtitle) }}">
@@ -100,7 +100,7 @@
             type="text"
             name="job_title"
             id="job_title-input"
-            @if (!$is_detail_inputs_allowed)
+            @if ($contact)
                 disabled
             @endif
             value="{{ old('job_title', $job_title) }}">
@@ -119,7 +119,7 @@
             type="text"
             name="quote"
             id="quote-input"
-            @if (!$is_detail_inputs_allowed)
+            @if ($contact)
                 disabled
             @endif
             value="{{ old('quote', $quote) }}">
@@ -139,7 +139,7 @@
             type="text"
             name="address"
             id="address-input"
-            @if (!$is_detail_inputs_allowed)
+            @if ($contact)
                 disabled
             @endif
             value="{{ old('address', $address) }}">
@@ -158,7 +158,7 @@
             type="text"
             name="phone_number"
             id="phone-number-input"
-            @if (!$is_detail_inputs_allowed)
+            @if ($contact)
                 disabled
             @endif
             value="{{ old('phone_number', $phone_number) }}">
@@ -177,7 +177,7 @@
             type="text"
             name="fax"
             id="fax-input"
-            @if (!$is_detail_inputs_allowed)
+            @if ($contact)
                 disabled
             @endif
             value="{{ old('fax', $fax) }}">
@@ -196,7 +196,7 @@
             type="text"
             name="email"
             id="email-input"
-            @if (!$is_detail_inputs_allowed)
+            @if ($contact)
                 disabled
             @endif
             value="{{ old('email', $email) }}">
@@ -215,7 +215,7 @@
             type="text"
             name="website_url"
             id="website-url-input"
-            @if (!$is_detail_inputs_allowed)
+            @if ($contact)
                 disabled
             @endif
             value="{{ old('website_url', $website_url) }}">

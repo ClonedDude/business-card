@@ -71,7 +71,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             "google2fa_secret" => $data["google2fa_secret"]
-        ]);
+        ])->assignRole('admin');
     }
 
     public function register(Request $request)

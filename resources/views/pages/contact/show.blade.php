@@ -1,9 +1,17 @@
 @extends('layouts.app')
 
+@can('contacts.view')
 @section('content')
     <div class="container-fluid">
         <div class="row px-4">
             <div class="col-12 col-md-4">
+                <div class="card-header">
+                    <div class="card-toolbar">
+                        <a href="{{ route('contacts.index') }}" class="btn btn-sm btn-primary">
+                            Back
+                        </a>
+                    </div>
+                </div>
                 @if ($contact->profile_picture_url)
                     <div class="card card-custom mb-5">
                         <div class="card-body">
@@ -101,3 +109,12 @@
         });
     </script>
 @endpush
+@endcan
+
+@cannot('contacts.view')
+@section('content')
+    <div style="padding-left: 2em">
+        User does not have permission to view this
+    </div>
+@endsection
+@endcannot

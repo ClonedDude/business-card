@@ -140,17 +140,20 @@
 
 @section('content')
     <!-- Hero Section -->
+    
     <div class="hero-section text-white d-flex align-items-center p-0">
         <!--Menu Item-->
         <div class="menu-left">
-            <div class="icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-asterisk" viewBox="0 0 16 16">
-                    <path d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1"/>
-                </svg>
-            </div>
+            <a href="{{ route('contacts.index') }}">
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-asterisk" viewBox="0 0 16 16">
+                        <path d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1"/>
+                    </svg>
+                </div>
+            </a>
         </div>
         <div class="menu-right">
-            <a href="{{ route('public-download-vcard', [$contact->contact_code]) }}" class="text-white">
+            <a href="{{ route('public-download-vcard', [$contact_code]) }}" class="text-white">
                 <div class="icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
                         <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
@@ -200,10 +203,12 @@
                             style="border: 1px solid #fff">
                             SAVE CONTACT
                         </a>
-                        @if ($contact->website_url)
-                            <a href="{{ $contact->website_url }}" class="btn my-2 btn-light text-dark">
+                        @if($contact->website_url)
+                            <a href="https://{{ $contact->website_url }}" class="btn my-2 btn-light text-dark" target="_blank" rel="noopener noreferrer">
                                 GO TO WEBSITE
                             </a>
+                        @else
+                            <p class="text-danger">Invalid URL</p>
                         @endif
                     </div>
                 </div>

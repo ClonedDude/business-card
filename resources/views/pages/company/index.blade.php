@@ -9,11 +9,13 @@
                     <div class="card-title">
                         {{ __('Company List') }}
                     </div>
+                    @can('companies.store')
                     <div class="card-toolbar">
                         <a href="{{ route('companies.create') }}" class="btn btn-sm btn-primary">
                             Create
                         </a>
                     </div>
+                    @endcan
                 </div>
 
                 <div class="card-body">
@@ -59,7 +61,12 @@
                 url: '{{ route("companies.data") }}',
                 data: function (d) {
                     // d.role = $('#role-filter').val();
-                }
+                },
+                error: function (xhr, error, thrown) {
+                // Show an error message
+                alert('Error fetching data: ' + xhr.responseJSON?.message || 'Unknown error occurred.');
+                console.error('Error details:', xhr.responseJSON || xhr.responseText);
+                },
             },
             columns: [
                 { data: 'logo', name: 'logo'},

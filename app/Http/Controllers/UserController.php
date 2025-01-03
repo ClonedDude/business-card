@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CompanyUser;
 use App\Models\Company;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
@@ -17,39 +21,62 @@ class UserController extends Controller
 
     public function data()
     {
-        $users_query = User::select("*")
-            ->with(["companies"]);
+        $company = CompanyUser::where('user_id', Auth::user()->id)->first();
 
-        return DataTables::of($users_query)
+        $companyId = session('company_id');
+
+        $user_query = User::whereHas('companies', function ($query) use ($companyId) {
+        $query->where('companies.id', $companyId); // Explicitly specify 'companies.id'
+        })->with('companies')->get();
+            
+        return DataTables::of($user_query)
             ->addColumn("companies", function ($row) {
                 $companies_html = "";
                 
                 foreach ($row->companies as $company) {
-                    $companies_html .= "<span class='badge bg-primary m-2'>{$company->name}</span>";
+                    $companies_html .= '<a href="'.route('companies.show', $company->id).'"><span class="badge bg-primary m-2">'.$company->name.'</span></a>';
                 }
 
                 return $companies_html;
             })
+            
+            ->addColumn("roles", function ($row) {
+                $roles_html = "";
+    
+                foreach ($row->roles as $role) {
+                    $roles_html .= '<a href="'.route('roles.edit', $row->id).'"><span class="badge bg-success m-2">'.$role->name.'</span></a>';
+                }
+    
+                return $roles_html;
+            })
+
             ->addColumn("action", function ($row) {
                 // $detail_button
                 //     = '<a href="'.route('users.show', $row->id).'" class="btn btn-sm btn-primary me-2 mb-4">
                 //         <i class="fas fa-eye"></i>
                 //         Detail
                 //     </a>';
+                $edit_button = '';
+                $delete_button = '';
 
-                $edit_button
+                if (Auth::user()->can('users.update')) {  
+                    $edit_button
                     = '<a href="'.route('users.edit', $row->id).'" class="btn btn-sm btn-info me-2 mb-4">
                         <i class="fas fa-edit"></i>
                         Edit
                     </a>';
+                }
 
-                $delete_button
-                    = '<form class="delete-training-form" action="'.route('users.delete', $row->id).'" method="POST">
-                        '.csrf_field().'
-                        <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
-                        <i class="fas fa-trash"></i>
-                         Delete</button>
-                    </form>';
+                if (Auth::user()->can('users.delete')) {  
+
+                    $delete_button
+                        = '<form class="delete-training-form" action="'.route('users.delete', $row->id).'" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this expense? This action cannot be undone.\')">
+                            '.csrf_field().'
+                            <button type="submit" class="btn btn-sm btn-danger me-2 mb-4"> 
+                            <i class="fas fa-trash"></i>
+                            Delete</button>
+                        </form>';
+                }
 
                 $html = "<div class='d-flex flex-row'>
                     $edit_button
@@ -58,7 +85,10 @@ class UserController extends Controller
 
                 return $html;
             })
-            ->rawColumns(["companies", "action"])
+            
+            ->rawColumns([
+                "companies", "roles", "action"
+                ])
             ->make(true);
     }
 
@@ -71,9 +101,10 @@ class UserController extends Controller
 
     public function create()
     {
-        $companies = Company::all();
-
-        return view("pages.user.create", compact("companies"));
+        $companyIds = CompanyUser::where('user_id', Auth::user()->id)->pluck('company_id');
+        $companies = Company::whereIn('id', $companyIds)->get();
+        $roles = Role::whereIn("company_id", $companyIds)->get();
+        return view("pages.user.create", compact("companies", "roles"));
     }
 
     public function store(Request $request, UserService $userService)
@@ -86,10 +117,11 @@ class UserController extends Controller
 
     public function edit(int $id)
     {
-        $user = User::find($id);
-        $companies = Company::all();
-
-        return view("pages.user.edit", compact("user", "companies"));
+        $user = User::findOrFail($id);
+        $companyIds = CompanyUser::where('user_id', $user->id)->pluck('company_id');
+        $companies = Company::whereIn('id', $companyIds)->get();
+        $roles = Role::whereIn("company_id", $companyIds)->get();
+        return view("pages.user.edit", compact("user", "companies", "roles"));
     }
 
     public function update(Request $request, UserService $userService, int $id)

@@ -13,14 +13,24 @@
                             fill="black" />
                     </svg>
                 </span>
-
-
             </div>
         </div>
         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-            <a href="../../demo1/dist/index.html" class="d-lg-none">
-                <img alt="Logo" src="{{ asset('assets/images/logo.png') }}" class="h-30px" />
-            </a>
+            @if (auth()->user()->companies()->count() > 1)
+                <form action="{{ route('switch-company') }}" method="POST" class="form-group d-flex flex-row" id="switchCompanyForm">
+                    @csrf
+                    <select class="form-select form-select-lg me-2" name="company_id" id="company_id">
+                        @foreach (auth()->user()->companies()->get() as $company)
+                            <option value="{{ $company->id }}" @if (session("company_id") == $company->id) style="background-color: #009EF7; color:white" selected @endif>
+                                {{ $company->name }} 
+                            </option>
+                        @endforeach
+                    </select>
+                    <button class="btn btn-sm btn-primary">
+                        Switch
+                    </button>
+                </form>
+            @endif
         </div>
 
         <div class="d-flex flex-row-reverse align-items-center">
@@ -29,11 +39,23 @@
                 <div class="dropdown-menu dropdown-menu-right">
                     {{-- @livewire('notification-list')             --}}
                 </div>
-            </div>            
+            </div>
         </div>
     </div>
 </div>
 
+<script>
+    document.getElementById('switchCompanyForm').addEventListener('submit', function(event) {
+        const selectedCompanyId = document.getElementById('company_id').value;
+        const currentCompanyId = "{{ session('company_id') }}";
+
+        if (selectedCompanyId === currentCompanyId) {
+            // Prevent form submission if the selected company is the same
+            event.preventDefault();
+            alert('Company already in session');
+        }
+    });
+</script>
+
 @push('head')
-    
 @endpush

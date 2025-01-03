@@ -1,0 +1,126 @@
+@extends('layouts.app')
+
+@can('roles.store')
+@section('content')
+<div class="container-fluid">
+    <div class="row justify-content-center px-4">
+        <div class="col-12 col-md-12">
+            <form action="{{ route('roles.store') }}" method="POST" class="card" enctype="multipart/form-data">
+                <div class="card-header">
+                    <div class="card-title">
+                        {{ __('Create Role') }}
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    @csrf
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="hidden" name="company_id" value="{{ getPermissionsTeamId()}}">
+                        
+                            <x-text-input
+                                title="name"
+                                name="name"
+                                id="name-input"
+                                required="required"
+                                />
+        
+                                <div class="row">
+                                    @php
+                                    // Group permissions by the prefix (e.g., 'expenses', 'items')
+                                    $groupedPermissions = $permissions->groupBy(function ($permission) {
+                                        return explode('.', $permission->name)[0]; // Extract the prefix
+                                    });
+                                    @endphp
+                                    @foreach ($groupedPermissions as $category => $permissionsGroup)
+                                    <div class="col-12 mb-3">
+                                        <div class="d-flex align-items-center">
+                                            <h5 class="me-2 mb-0">{{ ucfirst($category) }}</h5> <!-- Section title -->
+                                            <input
+                                                type="checkbox"
+                                                class="role-checkbox"
+                                                id="role-checkbox-{{ $category }}"
+                                                data-category="{{ $category }}"
+                                                style="transform: scale(1.2);"
+                                            >
+                                            <label for="role-checkbox-{{ $category }}" class="ms-2 mb-0">Select All</label>
+                                        </div>
+                                    </div>
+                                    @foreach ($permissionsGroup as $permission)
+                                        @if (!preg_match("/\*/", $permission->name))
+                                            <div class="col-3 mb-2">
+                                                <div class="form-check form-check-inline">
+                                                    <label class="form-check-label">
+                                                        <input
+                                                            class="form-check-input permission-checkbox"
+                                                            type="checkbox"
+                                                            name="permissions[]"
+                                                            id="{{ $permission->name."-".$permission->id }}"
+                                                            value="{{ $permission->name }}"
+                                                            data-category="{{ $category }}"
+                                                        >
+                                                        {{ $permission->name }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                    @endforeach
+                                </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-primary">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 
+@endsection
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Select all role checkboxes
+    const roleCheckboxes = document.querySelectorAll('.role-checkbox');
+
+    roleCheckboxes.forEach(roleCheckbox => {
+        roleCheckbox.addEventListener('change', function () {
+            const category = this.getAttribute('data-category');
+            const relatedCheckboxes = document.querySelectorAll(
+                `.permission-checkbox[data-category="${category}"]`
+            );
+
+            relatedCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+    });
+
+    // Optional: Update the role checkbox based on individual checkbox changes
+    const permissionCheckboxes = document.querySelectorAll('.permission-checkbox');
+    permissionCheckboxes.forEach(permissionCheckbox => {
+        permissionCheckbox.addEventListener('change', function () {
+            const category = this.getAttribute('data-category');
+            const roleCheckbox = document.querySelector(`.role-checkbox[data-category="${category}"]`);
+            const relatedCheckboxes = document.querySelectorAll(
+                `.permission-checkbox[data-category="${category}"]`
+            );
+            
+            roleCheckbox.checked = [...relatedCheckboxes].every(cb => cb.checked);
+        });
+    });
+    });
+</script>
+@endcan
+@cannot('roles.store')
+@section('content')
+    <div style="padding-left: 2em">
+        User does not have permission to view this
+    </div>
+@endsection
+@endcannot

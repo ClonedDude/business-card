@@ -35,6 +35,11 @@
     </div>
 
     <div class="d-flex flex-row justify-content-between p-4 border-bottom">
+        <div class="text-capitalize">Company ID: </div>
+        <div>{{ $expense->company_id }}</div>
+    </div>
+
+    <div class="d-flex flex-row justify-content-between p-4 border-bottom">
         <div class="text-capitalize">Created at: </div>
         <div>{{ $expense->created_at }}</div>
     </div>
@@ -42,39 +47,55 @@
     <div class="d-flex flex-row justify-content-between p-4 border-bottom">
         <div class="text-capitalize">Approval: </div>
             <div> 
-                @if($expense->approval=0)
-                <p>Not approved</p>
-                @elseif($expense->approval=1)
+                @if($expense->approval==0)
+                <p>Pending</p>
+                @elseif($expense->approval==1)
                 <p>Approved</p>
+                @elseif($expense->approval==2)
+                <p>Rejected</p>
                 @endif
             </div>
     </div>
 
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-row justify-content-between p-4 border-bottom">
+        <div class="text-capitalize">Receipt Picture: </div>
+        
+        @forelse($media as $medias)
+            <div class="receipt-picture">
+                <img src="{{ $medias->getFullUrl() }}" alt="Receipt Picture" style="max-width: 200px; height: auto;">
+            </div>
+        @empty
+            <p>No receipt pictures available.</p>
+        @endforelse
+        </div>
+    </div>
+
+    <div class="d-flex flex-row justify-content-between p-4 border-bottom">
         
         {{-- List the items associated with the expense --}}
         @if($expense->expenseItems->isEmpty())
             <p>No items associated with this expense.</p>
         @else
-            <table class="table">
+            <table class="item-table">
                 <thead>
                     <tr>
                         <th>Item Name</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Subtotal</th>
+                        <th class="text-center">Price</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-center">Subtotal</th>
                     </tr>
                 </thead>
                     <tbody>
                         @foreach ($expense->expenseItems as $item)
                             <tr>
                                 <td>{{ $item->item->name }}</td> <!-- Access the related item's name -->
-                                <td>{{ $item->price }}</td>
-                                <td>{{ $item->quantity }}</td>
-                                <td>{{ $item->price * $item->quantity }}</td>
+                                <td class="text-center">{{ $item->currency }} {{ number_format($item->price, 2) }}</td>
+                                <td class="text-center">{{ $item->quantity }}</td>
+                                <td class="text-center">{{ $item->currency }} {{ number_format($item->price * $item->quantity, 2) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
             </table>
         @endif
+    </div>
 </div>

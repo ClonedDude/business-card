@@ -105,4 +105,6 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->belongsToMany(Company::class, "company_users", "user_id", "company_id");
     }
+
+    
 }

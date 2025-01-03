@@ -5,6 +5,9 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
+
 
 class UserSeeder extends Seeder
 {
@@ -18,6 +21,5 @@ class UserSeeder extends Seeder
             'email' => 'admin@email.com',
             'password' => 'password',
         ]);
-        $admin->assignRole("admin");
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\CompanyUserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseItemController;
+use App\Http\Controllers\ExpenseApprovalController;
 use App\Http\Controllers\ExternalLinkController;
 use App\Http\Controllers\ExternalLinkTypeController;
 use App\Http\Controllers\HomeController;
@@ -17,6 +18,9 @@ use App\Http\Controllers\SubscriptionPlanController;
 use App\Http\Controllers\SubscriptionPlanRuleController;
 use App\Http\Controllers\SubscriptionRuleController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,7 +48,7 @@ use Illuminate\Support\Facades\Route;
 Route::get("/c/{contact_code}", [PublicContactController::class, 'show'])->name("public-contact-detail");
 Route::get("/c/{contact_code}/download-vcard", [PublicContactController::class, 'download'])->name("public-download-vcard");
 
-Route::middleware(['2fa'])->group(function () {
+Route::middleware(['auth','2fa'])->group(function () {
     Route::get('/', function () {
         return view('welcome');
     });
@@ -108,29 +112,8 @@ Route::middleware(['2fa'])->group(function () {
         Route::post("/{id}/delete", [ContactController::class, 'delete'])->name("delete");
     });
 
-    Route::group([
-        "prefix" => "subscription-plans",
-        "as" => "subscription-plans.",
-    ], function () {
-        Route::get("/", [SubscriptionPlanController::class, 'index'])->name("index");
-        Route::get("/{id}/detail", [SubscriptionPlanController::class, 'show'])->name("show");
-        Route::get("/create", [SubscriptionPlanController::class, 'create'])->name("create");
-        Route::post("/store", [SubscriptionPlanController::class, 'store'])->name("store");
-        Route::get("/{id}/edit", [SubscriptionPlanController::class, 'edit'])->name("edit");
-        Route::post("/{id}/update", [SubscriptionPlanController::class, 'update'])->name("update");
-        Route::post("/{id}/delete", [SubscriptionPlanController::class, 'delete'])->name("delete");
-    });
 
-    Route::group([
-        "prefix" => "subscription-plan-rules",
-        "as" => "subscription-plan-rules.",
-    ], function () {
-        Route::get("/{subscription_plan_id}", [SubscriptionPlanRuleController::class, 'index'])->name("index");
-        Route::get("/{subscription_plan_id}/create", [SubscriptionPlanRuleController::class, 'create'])->name("create");
-        Route::post("/{subscription_plan_id}/store", [SubscriptionPlanRuleController::class, 'store'])->name("store");
-        Route::get("/{subscription_plan_id}/edit", [SubscriptionPlanRuleController::class, 'edit'])->name("edit");
-        Route::post("/{subscription_plan_id}/update", [SubscriptionPlanRuleController::class, 'update'])->name("update");
-    });
+    
 
     Route::group([
         "prefix" => "orders",
@@ -154,6 +137,39 @@ Route::middleware(['2fa'])->group(function () {
         Route::get("/{id}/edit", [SubscriptionController::class, 'edit'])->name("edit");
         Route::post("/{id}/update", [SubscriptionController::class, 'update'])->name("update");
         Route::post("/{id}/delete", [SubscriptionController::class, 'delete'])->name("delete");
+    });
+
+    Route::group([
+        "prefix" => "subscription-rules",
+        "as" => "subscription-rules.",
+    ], function () {
+        Route::get("/", [SubscriptionRuleController::class, 'index'])->name("index");
+    });
+
+    
+    Route::group([
+        "prefix" => "subscription-plans",
+        "as" => "subscription-plans.",
+    ], function () {
+        Route::get("/", [SubscriptionPlanController::class, 'index'])->name("index");
+        Route::get("/{id}/detail", [SubscriptionPlanController::class, 'show'])->name("show");
+        Route::get("/data", [SubscriptionPlanController::class, 'data'])->name("data");
+        Route::get("/create", [SubscriptionPlanController::class, 'create'])->name("create");
+        Route::post("/store", [SubscriptionPlanController::class, 'store'])->name("store");
+        Route::get("/{id}/edit", [SubscriptionPlanController::class, 'edit'])->name("edit");
+        Route::post("/{id}/update", [SubscriptionPlanController::class, 'update'])->name("update");
+        Route::post("/{id}/delete", [SubscriptionPlanController::class, 'delete'])->name("delete");
+    });
+
+    Route::group([
+        "prefix" => "subscription-plan-rules",
+        "as" => "subscription-plan-rules.",
+    ], function () {
+        Route::get("/{subscription_plan_id}", [SubscriptionPlanRuleController::class, 'index'])->name("index");
+        Route::get("/{subscription_plan_id}/create", [SubscriptionPlanRuleController::class, 'create'])->name("create");
+        Route::post("/{subscription_plan_id}/store", [SubscriptionPlanRuleController::class, 'store'])->name("store");
+        Route::get("/{subscription_plan_id}/edit", [SubscriptionPlanRuleController::class, 'edit'])->name("edit");
+        Route::post("/{subscription_plan_id}/update", [SubscriptionPlanRuleController::class, 'update'])->name("update");
     });
 
     Route::group([
@@ -195,6 +211,9 @@ Route::middleware(['2fa'])->group(function () {
         Route::get("/{id}/edit", [ExpenseController::class, 'edit'])->name("edit");
         Route::post("/{id}/update", [ExpenseController::class, 'update'])->name("update");
         Route::post("/{id}/delete", [ExpenseController::class, 'delete'])->name("delete");
+        Route::get('/expenses/search-items', [ExpenseController::class, 'searchItems'])->name('search-items');
+        Route::post('/approve/{expenseId}', [ExpenseApprovalController::class, 'approveExpense'])->name('approve');
+        Route::post('/reject/{expenseId}', [ExpenseApprovalController::class, 'rejectExpense'])->name('reject');
     });
 
     //Items (expense) route
@@ -212,19 +231,34 @@ Route::middleware(['2fa'])->group(function () {
         Route::post("/{id}/delete", [ExpenseItemController::class, 'delete'])->name("delete");
     });
 
+    Route::post("/switch-companies", [SessionController::class, 'switchCompany'])->name("switch-company");    
+
 
     Route::group([
-        "prefix" => "subscription-rules",
-        "as" => "subscription-rules.",
+        "prefix" => "roles",
+        "as" => "roles.",
     ], function () {
-        Route::get("/", [SubscriptionRuleController::class, 'index'])->name("index");
+        Route::get("/", [RoleController::class, 'index'])->name("index");
+        Route::get("/data", [RoleController::class, 'data'])->name("data");
+        Route::get("/{id}/detail", [RoleController::class, 'show'])->name("show");
+        Route::get("/create", [RoleController::class, 'create'])->name("create");
+        Route::post("/store", [RoleController::class, 'store'])->name("store");
+        Route::get("/{id}/edit", [RoleController::class, 'edit'])->name("edit");
+        Route::post("/{id}/update", [RoleController::class, 'update'])->name("update");
+        Route::post("/{id}/delete", [RoleController::class, 'delete'])->name("delete");
     });
+
+
+
+    
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::post('/2fa', function () {
         return redirect(route('home'));
     })->name('2fa');
+
+
 });
 
 Auth::routes();

@@ -40,6 +40,7 @@
                             <div class="fv-plugins-message-container invalid-feedback"></div></div>
                             <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
                                 <div></div>
+                                
                                 @if (Route::has('password.request'))
                                     <a href="{{ route('password.request') }}" class="link-primary">
                                         Forgot Password ?
@@ -54,6 +55,12 @@
                                         Please wait...    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                     </span>
                                 </button>
+
+                                @if (Route::has('register'))
+                                    <a href="{{ route('register') }}" class="link-primary text-center" style="margin-top: 2em">
+                                        Already have an account? Register here
+                                    </a>
+                                @endif
                             </div>
                             {{-- <div class="text-gray-500 text-center fw-semibold fs-6">
                                 Do not have an account ?

@@ -1,9 +1,17 @@
 @extends('layouts.app')
 
+@can('companies.update')
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center px-4">
         <div class="col-12 col-md-12">
+            <div class="card-header">
+                <div class="card-toolbar">
+                    <a href="{{ route('companies.index') }}" class="btn btn-sm btn-primary">
+                        Back
+                    </a>
+                </div>
+            </div>
             <form action="{{ route('companies.update', $company->id) }}" method="POST" enctype="multipart/form-data" class="card">
                 <div class="card-header">
                     <div class="card-title">
@@ -86,7 +94,7 @@
                 </div>
                 <div class="card-footer">
                     <button class="btn btn-primary">
-                        Submit
+                        Save
                     </button>
                 </div>
             </form>
@@ -94,3 +102,12 @@
     </div>
 </div> 
 @endsection
+@endcan
+
+@cannot('companies.update')
+@section('content')
+    <div style="padding-left: 2em">
+        User does not have permission to view this
+    </div>
+@endsection
+@endcannot
